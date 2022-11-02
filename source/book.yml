@@ -1,11 +1,7 @@
 ---
-proxy: http://gia.sebank.se:8080
-user:
-  email: teodor.noren@seb.se
-  password: put the password in the github secret named FEELGOOD_PASSWORD
 activity:
   name: Badminton
-  time: "19:05"
+  time: "15:00"
 url:
   login: https://feelgood.wondr.se/
   home: https://feelgood.wondr.se/users/start
