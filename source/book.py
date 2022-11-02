@@ -138,10 +138,10 @@ def main():
         r = s.get(specific_url, headers=headers)
 
         activity_dict = r.json()
-
+        foundSomething = False
         for act in activity_dict["activities"]:
             # Create config file for activity type and time
-            foundSomething = False
+            
             if config["activity"]["name"] in act["ActivityType"]["name"] and config["activity"]["time"] in act["Activity"]["start"]:
                 print(f"Found activity matching: {config['activity']['name']} at time: {config['activity']['time']}")
                 print (act["ActivityType"]["name"])
