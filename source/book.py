@@ -74,8 +74,6 @@ def initialize_parser() -> dict:
         "test":parsed.test
     }
     
-    print(f"Parsed time {parsed.time}")
-
     if parsed.time:
         input_vars["time"] = parsed.time
 
