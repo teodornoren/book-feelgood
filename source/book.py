@@ -122,6 +122,9 @@ def main():
 
     headers = config["headers"]
 
+    print(f"Match activity string : {config['activity']['name']}")
+    print(f"Match activity time   : {config['activity']['time']}")
+
     with requests.session() as s:
         s.post(config["url"]["login"], json=payload)
         r = s.get(config["url"]["home"])
@@ -148,6 +151,10 @@ def main():
                     print(booking_url)
                 
                 foundSomething = True
+
+    if not foundSomething:
+        print("No matching activity was found, sorry about that.")
+
             
 
 if __name__ == "__main__":
