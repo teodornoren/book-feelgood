@@ -1,0 +1,122 @@
+import requests
+import datetime
+import yaml
+import argparse
+
+#how to book and unbook
+"""
+https://feelgood.wondr.se/w_booking/activities/cancel/63603a59-215c-46dc-bd89-0cd50a100525/1?force=1  <--- unbook
+https://feelgood.wondr.se/w_booking/activities/participate/{activity_code}}/?force=1 <--- book
+
+"""
+
+def read_yaml(filename):
+    """
+    Reads yaml file and returns the dictionary
+
+        Args:
+            filename: The name of the yaml file to read
+
+        Returns:
+            Dictionary with the yaml blob
+    """
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            yaml_blob = yaml.safe_load(file)
+
+            return yaml_blob
+    except Exception as expt:
+        raise expt
+
+def initialize_parser():
+    """
+    Needed input arguments for this program 
+
+    Returns:
+        password, test
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-pw","--password",
+        help="The password for feelgood login",
+        required=True
+        )
+
+    parser.add_argument(
+        "-tst","--test",
+        nargs='?',
+        help="Do a dry run test",
+        type=bool,
+        default=False
+    )
+
+    parsed = parser.parse_args()
+    return parsed.password, parsed.test
+
+def get_date(offset: int, verbose = False):
+    dt = datetime.date.today()
+    new_date = dt - datetime.timedelta(days=-offset)
+
+    if verbose:
+        print("Today -v-")
+        print(f"Datetime is: {dt}")
+        print(f"Weekday is: {dt.isoweekday()}")
+        print("Offset day -v-")
+        print(f"Datetime is: {new_date}")
+        print(f"Weekday is: {new_date.isoweekday()}")
+
+    return new_date
+
+def main():
+    #get parser args
+
+    config = read_yaml("source/book.yml")
+
+    pw, test = initialize_parser()
+
+    if(test):
+        print("---running as test, no booking will be made---")
+
+    date_next_week = get_date(offset=6)
+
+    specific_url = f"https://feelgood.wondr.se/w_booking/activities/list?from={date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&type=&only_try_it=0&facility=60a7ac3f-b774-4228-a9a3-056c0a10010d"
+
+    payload = {
+        "User": {
+            "email" : config["user"]["email"],
+            "password" : pw
+            }
+        }
+
+    headers = config["headers"]
+
+    with requests.session() as s:
+        s.post(config["url"]["login"], json=payload)
+        r = s.get(config["url"]["home"])
+        r = s.get(config["url"]["book"])
+
+        #The magic
+        r = s.get(specific_url, headers=headers)
+
+        activity_dict = r.json()
+
+        for act in activity_dict["activities"]:
+            # Create config file for activity type and time
+            foundSomething = False
+            if config["activity"]["name"] in act["ActivityType"]["name"] and config["activity"]["time"] in act["Activity"]["start"]:
+                print(f"Found activity matching: {config['activity']['name']} at time: {config['activity']['time']}")
+                print (act["ActivityType"]["name"])
+                print (act["Activity"]["start"])
+                print (act["Activity"]["id"])
+                booking_url = f"https://feelgood.wondr.se/w_booking/activities/participate/{act['Activity']['id']}/?force=1"
+                if not test and not foundSomething:
+                    s.post(booking_url, headers=headers)
+                else:
+                    print("Booking url that would be used:")
+                    print(booking_url)
+                
+                foundSomething = True
+            
+
+if __name__ == "__main__":
+    main()
