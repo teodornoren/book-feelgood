@@ -105,7 +105,7 @@ def main():
     if(input_vars["test"]):
         print("---running as test, no booking will be made---")
 
-    if(input_vars["time"]):
+    if("time" in input_vars):
         print(f"An input time of {input_vars['time']} overrides the config time of: {config['activity']['time']}")
         config["activity"]["time"] = input_vars["time"]
 
