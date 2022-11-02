@@ -64,7 +64,8 @@ def initialize_parser() -> dict:
     parser.add_argument(
         "-t", "--time,",
         help="Add an optional time if you do not want to use the config time",
-        required=False
+        required=False,
+        default=None
     )
 
     parsed = parser.parse_args()
