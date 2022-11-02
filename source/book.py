@@ -65,17 +65,22 @@ def initialize_parser() -> dict:
         "-t", "--time,",
         help="Add an optional time if you do not want to use the config time",
         required=False,
-        default=None
     )
 
     parsed = parser.parse_args()
     input_vars = {
         "username":parsed.username,
         "password":parsed.password,
-        "test":parsed.test,
-        "time":parsed.time
+        "test":parsed.test
     }
     
+    print(f"Parsed time {parsed.time}")
+
+    if parsed.time:
+        input_vars["time"] = parsed.time
+
+    
+
     return input_vars
 
 def get_date(offset: int, verbose = False):
