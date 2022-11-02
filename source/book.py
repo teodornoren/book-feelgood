@@ -98,6 +98,10 @@ def get_date(offset: int, verbose = False):
 def main():
     #get parser args
 
+    banner = read_yaml("source/banner.yml")
+
+    print(banner["banner"])
+
     config = read_yaml("source/config.yml")
 
     input_vars = initialize_parser()
