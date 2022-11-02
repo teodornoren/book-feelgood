@@ -5,9 +5,7 @@ on:
 
 jobs:
   book:
-    
     runs-on: KAV
-    
     steps:
       - uses: actions/checkout@v3
       
@@ -15,4 +13,4 @@ jobs:
         run: python3 -m pip install -r source/requirements.txt
         
       - name: Run booking action test
-        run: python3 source/book.py -usr {{ secrets.FEELGOOD_USER }} -pw {{ secrets.FEELGOOD_PW }} -tst True
+        run: python3 source/book.py -usr ${{ secrets.FEELGOOD_USER }} -pw ${{ secrets.FEELGOOD_PW }} -tst True
