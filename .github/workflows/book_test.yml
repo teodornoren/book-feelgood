@@ -6,9 +6,6 @@ on:
       time:
         type: string
 
-        
-
-
 jobs:
   book:
     runs-on: KAV
