@@ -28,12 +28,16 @@ def read_yaml(filename):
     except Exception as expt:
         raise expt
 
-def initialize_parser():
+def initialize_parser() -> dict:
     """
     Needed input arguments for this program 
 
     Returns:
-        password, test
+        Dictionary containing parmeters
+            username(string),
+            password(string),
+            test(bool),
+            time(str)
     """
     parser = argparse.ArgumentParser()
     
@@ -53,12 +57,25 @@ def initialize_parser():
         nargs='?',
         help="Do a dry run",
         type=bool,
-        default=False
+        default=False,
+        required=False
     )
 
+    parser.add_argument(
+        "-t", "--time,",
+        help="Add an optional time if you do not want to use the config time",
+        required=False
+    )
 
     parsed = parser.parse_args()
-    return parsed.password, parsed.username, parsed.test
+    input_vars = {
+        "username":parsed.username,
+        "password":parsed.password,
+        "test":parsed.test,
+        "time":parsed.time
+    }
+    
+    return input_vars
 
 def get_date(offset: int, verbose = False):
     dt = datetime.date.today()
@@ -79,10 +96,14 @@ def main():
 
     config = read_yaml("source/config.yml")
 
-    pw, username, test = initialize_parser()
+    input_vars = initialize_parser()
 
-    if(test):
+    if(input_vars["test"]):
         print("---running as test, no booking will be made---")
+
+    if(input_vars["time"]):
+        print(f"An input time of {input_vars['time']} overrides the config time of: {config['activity']['time']}")
+        config["activity"]["time"] = input_vars["time"]
 
     date_next_week = get_date(offset=6)
 
@@ -90,8 +111,8 @@ def main():
 
     payload = {
         "User": {
-            "email" : username,
-            "password" : pw
+            "email" : input_vars["username"],
+            "password" : input_vars["password"]
             }
         }
 
@@ -116,7 +137,7 @@ def main():
                 print (act["Activity"]["start"])
                 print (act["Activity"]["id"])
                 booking_url = f"https://feelgood.wondr.se/w_booking/activities/participate/{act['Activity']['id']}/?force=1"
-                if not test and not foundSomething:
+                if not input_vars["test"] and not foundSomething:
                     s.post(booking_url, headers=headers)
                 else:
                     print("Booking url that would be used:")
