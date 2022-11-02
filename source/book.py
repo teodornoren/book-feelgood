@@ -77,7 +77,7 @@ def get_date(offset: int, verbose = False):
 def main():
     #get parser args
 
-    config = read_yaml("source/book.yml")
+    config = read_yaml("source/config.yml")
 
     pw, username, test = initialize_parser()
 
