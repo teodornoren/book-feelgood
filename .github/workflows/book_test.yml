@@ -2,6 +2,12 @@ name: Book activity - test run
 
 on:
   workflow_dispatch:
+    inputs:
+      time:
+        type: string
+
+        
+
 
 jobs:
   book:
