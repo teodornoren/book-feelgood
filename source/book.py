@@ -36,6 +36,12 @@ def initialize_parser():
         password, test
     """
     parser = argparse.ArgumentParser()
+    
+    parser.add_argument(
+        "-usr", "--username",
+        help="The username for feelgood login",
+        required=True
+    )
     parser.add_argument(
         "-pw","--password",
         help="The password for feelgood login",
@@ -45,16 +51,11 @@ def initialize_parser():
     parser.add_argument(
         "-tst","--test",
         nargs='?',
-        help="Do a dry run test",
+        help="Do a dry run",
         type=bool,
         default=False
     )
 
-    parser.add_argument(
-        "-usr", "--username",
-        required=True,
-        help="The username for feelgood login"
-    )
 
     parsed = parser.parse_args()
     return parsed.password, parsed.username, parsed.test
