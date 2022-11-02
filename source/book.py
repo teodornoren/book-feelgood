@@ -50,8 +50,14 @@ def initialize_parser():
         default=False
     )
 
+    parser.add_argument(
+        "-usr", "--username",
+        required=True,
+        help="The username for feelgood login"
+    )
+
     parsed = parser.parse_args()
-    return parsed.password, parsed.test
+    return parsed.password, parsed.username, parsed.test
 
 def get_date(offset: int, verbose = False):
     dt = datetime.date.today()
@@ -72,7 +78,7 @@ def main():
 
     config = read_yaml("source/book.yml")
 
-    pw, test = initialize_parser()
+    pw, username, test = initialize_parser()
 
     if(test):
         print("---running as test, no booking will be made---")
@@ -83,7 +89,7 @@ def main():
 
     payload = {
         "User": {
-            "email" : config["user"]["email"],
+            "email" : username,
             "password" : pw
             }
         }
