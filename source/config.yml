@@ -2,6 +2,7 @@
 activity:
   name: Badminton
   time: "15:00"
+  day: Wednesday
 url:
   login: https://feelgood.wondr.se/
   home: https://feelgood.wondr.se/users/start
