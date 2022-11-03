@@ -81,6 +81,9 @@ def initialize_parser() -> dict:
 
     return input_vars
 
+def parse_day(day):
+    pass
+
 def get_date(offset: int, verbose = False):
     dt = datetime.date.today()
     new_date = dt - datetime.timedelta(days=-offset)
