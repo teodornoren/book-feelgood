@@ -3,6 +3,7 @@ name: Book activity
 on:
   schedule:
     - cron: '11 3 * * 4'
+  workflow_dispatch:
 
 jobs:
   book:
@@ -13,5 +14,5 @@ jobs:
       - name: install requirements
         run: python3 -m pip install -r source/requirements.txt
         
-      - name: Run booking action test
+      - name: Run booking action
         run: python3 source/book.py -usr ${{ secrets.FEELGOOD_USER }} -pw ${{ secrets.FEELGOOD_PW }}
