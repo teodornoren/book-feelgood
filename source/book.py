@@ -120,8 +120,8 @@ def main():
 
     if ("time" in input_vars):
         print(f"\
-            An input time of {input_vars['time']} overrides \
-                the config time of: {config['activity']['time']}")
+An input time of {input_vars['time']} overrides \
+the config time of: {config['activity']['time']}")
         config["activity"]["time"] = input_vars["time"]
 
     date_next_week = get_date(offset=6)
