@@ -1,0 +1,13 @@
+---
+Accept-Encoding: gzip, deflate, br
+Referer: https://feelgood.wondr.se/w_booking/activities
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+accept: application/json
+accept-language: en
+cache-control: no-store
+pragma: no-cache
+sec-ch-ua-mobile: "?0"
+sec-ch-ua-platform: Windows
+x-requested-with: XMLHttpRequest

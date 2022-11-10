@@ -4,13 +4,12 @@ import yaml
 import argparse
 
 """
+base url for book/unbook:
+https://feelgood.wondr.se/w_booking
 how to unbook:
-https://feelgood.wondr.se/w_booking\
     /activities/cancel/{activity_code}/1?force=1
 how to book:
-https://feelgood.wondr.se/w_booking\
     /activities/participate/{activity_code}}/?force=1
-
 """
 
 
@@ -29,8 +28,8 @@ def read_yaml(filename):
             yaml_blob = yaml.safe_load(file)
 
             return yaml_blob
-    except Exception as expt:
-        raise expt
+    except Exception as e:
+        raise e
 
 
 def initialize_parser() -> dict:
@@ -94,12 +93,14 @@ def get_date(offset: int, verbose=False):
     new_date = dt - datetime.timedelta(days=-offset)
 
     if verbose:
-        print("Today -v-")
-        print(f"Datetime is: {dt}")
-        print(f"Weekday is: {dt.isoweekday()}")
-        print("Offset day -v-")
-        print(f"Datetime is: {new_date}")
-        print(f"Weekday is: {new_date.isoweekday()}")
+        print(
+            "Today -v-"
+            f"Datetime is: {dt}"
+            f"Weekday is: {dt.isoweekday}"
+            "Offset day -v-"
+            f"Datetime is: {new_date}"
+            f"Weekday is: {new_date.isoweekday}"
+            )
 
     return new_date
 
@@ -119,9 +120,10 @@ def main():
         print("---running as test, no booking will be made---")
 
     if ("time" in input_vars):
-        print(f"\
-An input time of {input_vars['time']} overrides \
-the config time of: {config['activity']['time']}")
+        print(
+            f"An input time of {input_vars['time']} overrides"
+            f"the config time of: {config['activity']['time']}"
+            )
         config["activity"]["time"] = input_vars["time"]
 
     date_next_week = get_date(offset=6)
@@ -137,7 +139,7 @@ the config time of: {config['activity']['time']}")
             }
         }
 
-    headers = config["headers"]
+    headers = read_yaml("source/headers.yml")
 
     print(f"Match activity string : {config['activity']['name']}")
     print(f"Match activity time   : {config['activity']['time']}")
@@ -157,9 +159,11 @@ the config time of: {config['activity']['time']}")
             if config["activity"]["name"] in act["ActivityType"]["name"]\
                 and\
                     config["activity"]["time"] in act["Activity"]["start"]:
-                print(f"Found activity matching: \
-                    {config['activity']['name']} \
-                        at time: {config['activity']['time']}")
+                print(
+                    "Found activity matching:"
+                    f"{config['activity']['name']}"
+                    f"at time: {config['activity']['time']}"
+                    )
                 print(act["ActivityType"]["name"])
                 print(act["Activity"]["id"])
                 print(act["Activity"]["start"])
