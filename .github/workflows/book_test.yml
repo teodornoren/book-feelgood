@@ -5,6 +5,7 @@ on:
     inputs:
       time:
         type: string
+        description: time the activity starts
 
 jobs:
   book:

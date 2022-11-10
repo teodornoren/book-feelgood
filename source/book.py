@@ -153,7 +153,7 @@ def get_date(offset: int, verbose=False):
 
     if verbose:
         print(
-            f"""
+            f"""Verbose mode for get_date:
     Today -v-
     Datetime is: {dt}
     Weekday is: {parse_day(dt.isoweekday())}
@@ -170,12 +170,22 @@ def splash():
     print(banner["banner"])
 
 
+def parse_activities() -> dict:
+    acts = read_yaml("activities.yml")
+
+    for key, value in acts.items():
+        print(key, value)
+
+
 def main():
     """get parser args"""
 
     splash()
 
+    parse_activities()
+
     config = read_yaml("source/config.yml")
+    activities = read_yaml("activities.yml")
     input_vars = initialize_parser()
 
     if (input_vars["test"]):
@@ -184,22 +194,28 @@ def main():
     if ("time" in input_vars):
         print(
             f"An input time of {input_vars['time']} overrides "
-            f" the config time of: {config['activity']['time']}"
+            f" the config time of:{config['activity']['time']}"
             )
         config["activity"]["time"] = input_vars["time"]
     # Offset of 6 is the maximum that new activities appear
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
-    # Check if date_next_week matches the config day
-    if date_next_week.isoweekday() == parse_day(config["activity"]["day"]):
-        print("Config day matches, proceeding with booking")
-    else:
-        print("Config day mismatch, exiting...")
+    # Check if date_next_week matches any config days
+    book_acts = []
+    for act in activities["activities"]:
+        if date_next_week.isoweekday() == parse_day(act["day"]):
+            print(f"Config day matches, will book for {act}")
+            book_acts.append(act)
+        else:
+            print(f"Config day mismatch for {act}")
+
+    if not book_acts:
+        print("No activities to book today, bye!")
 
     specific_url = (
         "https://feelgood.wondr.se/w_booking/activities/list?from="
         f"{date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&"
-        f"type=&only_try_it=0&facility={config['facility']}"
+        f"type=&only_try_it=0&facility={activities['facility']}"
     )
 
     payload = {
@@ -211,13 +227,10 @@ def main():
 
     headers = read_yaml("source/headers.yml")
     if (input_vars["test"]):
-        print(">--Headers--<")
+        print(">--headers-start-<")
         for header, value in headers.items():
             print(f"    {header}: {value}")
-        print(">--end--<")
-
-    print(f"Match activity string : {config['activity']['name']}")
-    print(f"Match activity time   : {config['activity']['time']}")
+        print(">--headers-end--<")
 
     with requests.session() as s:
         s.post(config["url"]["login"], json=payload)
@@ -229,31 +242,33 @@ def main():
         activity_dict = r.json()
         foundSomething = False
         for act in activity_dict["activities"]:
-            if config["activity"]["name"] in act["ActivityType"]["name"]\
-                and\
-                    config["activity"]["time"] in act["Activity"]["start"]:
-                print(
-                    f"""
-                    Found activity matching:
-                    Name: {config['activity']['name']}
-                    Time: {config['activity']['time']}
-                    Activity details:
-                        {act["ActivityType"]["name"]}
-                        {act["Activity"]["id"]}
-                        {act["Activity"]["start"]}
-                    """
-                )
-                booking_url = (
-                    "https://feelgood.wondr.se/w_booking/"
-                    f"activities/participate/{act['Activity']['id']}/?force=1"
-                )
-                if not input_vars["test"] and not foundSomething:
-                    s.post(booking_url, headers=headers)
-                else:
-                    print("Booking url that would be used:")
-                    print(booking_url)
+            for book_act in book_acts:
+                if book_act["name"] in act["ActivityType"]["name"]\
+                    and\
+                        book_act["time"] in act["Activity"]["start"]:
+                    print(
+                        f"""
+                        Found activity matching:
+                        Name: {book_act['name']}
+                        Time: {book_act['time']}
+                        Activity details:
+                            {act["ActivityType"]["name"]}
+                            {act["Activity"]["id"]}
+                            {act["Activity"]["start"]}
+                        """
+                    )
+                    booking_url = (
+                        "https://feelgood.wondr.se/w_booking/"
+                        "activities/participate/"
+                        f"{act['Activity']['id']}/?force=1"
+                    )
+                    if not input_vars["test"] and not foundSomething:
+                        s.post(booking_url, headers=headers)
+                    else:
+                        print("Booking url that would be used:")
+                        print(booking_url)
 
-                foundSomething = True
+                    foundSomething = True
 
     if not foundSomething:
         print("No matching activity was found, sorry about that.")
