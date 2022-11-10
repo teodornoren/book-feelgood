@@ -107,36 +107,36 @@ def parse_day(day):
         day = day.lower()
         match day:
             case "monday":
-                day_parsed = 0
-            case "tuesday":
                 day_parsed = 1
-            case "wednesday":
+            case "tuesday":
                 day_parsed = 2
-            case "thursday":
+            case "wednesday":
                 day_parsed = 3
-            case "friday":
+            case "thursday":
                 day_parsed = 4
-            case "saturday":
+            case "friday":
                 day_parsed = 5
-            case "sunday":
+            case "saturday":
                 day_parsed = 6
+            case "sunday":
+                day_parsed = 7
             case _:
                 err_msg = f"str: {day}"
     if isinstance(day, int):
         match day:
-            case 0:
-                day_parsed = "Monday"
             case 1:
-                day_parsed = "Tuesday"
+                day_parsed = "Monday"
             case 2:
-                day_parsed = "Wednesday"
+                day_parsed = "Tuesday"
             case 3:
-                day_parsed = "Thursday"
+                day_parsed = "Wednesday"
             case 4:
-                day_parsed = "Friday"
+                day_parsed = "Thursday"
             case 5:
-                day_parsed = "Saturday"
+                day_parsed = "Friday"
             case 6:
+                day_parsed = "Saturday"
+            case 7:
                 day_parsed = "Sunday"
             case _:
                 err_msg = f"int: {day}"
