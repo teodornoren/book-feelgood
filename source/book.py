@@ -175,19 +175,10 @@ def splash():
     print(banner["banner"])
 
 
-def parse_activities() -> dict:
-    acts = read_yaml("activities.yml")
-
-    for key, value in acts.items():
-        print(key, value)
-
-
 def main():
     """get parser args"""
 
     splash()
-
-    parse_activities()
 
     config = read_yaml("source/config.yml")
     activities = read_yaml("activities.yml")
