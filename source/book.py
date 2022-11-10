@@ -94,12 +94,13 @@ def get_date(offset: int, verbose=False):
 
     if verbose:
         print(
-            f"""Today -v-"
-            "Datetime is: {dt}"
-            "Weekday is: {dt.isoweekday}"
-            Offset day -v-"
-            "Datetime is: {new_date}"
-            "Weekday is: {new_date.isoweekday}"
+            f"""
+    Today -v-"
+    "Datetime is: {dt}"
+    "Weekday is: {dt.isoweekday()}"
+    Offset day -v-"
+    "Datetime is: {new_date}"
+    "Weekday is: {new_date.isoweekday()}"
             """)
 
     return new_date
@@ -168,8 +169,10 @@ def main():
                 print(act["ActivityType"]["name"])
                 print(act["Activity"]["id"])
                 print(act["Activity"]["start"])
-                booking_url = f"https://feelgood.wondr.se/w_booking/\
-                    activities/participate/{act['Activity']['id']}/?force=1"
+                booking_url = (
+                    "https://feelgood.wondr.se/w_booking/"
+                    f"activities/participate/{act['Activity']['id']}/?force=1"
+                )
                 if not input_vars["test"] and not foundSomething:
                     s.post(booking_url, headers=headers)
                 else:
