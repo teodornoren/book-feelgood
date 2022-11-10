@@ -191,7 +191,7 @@ def main():
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
     # Check if date_next_week matches the config day
-    if date_next_week.isoweekday() in parse_day(config["day"]):
+    if date_next_week.isoweekday() in parse_day(config["activity"]["day"]):
         print("Config day matches, proceeding with booking")
     else:
         print("Config day mismatch, exiting...")
