@@ -1,7 +1,8 @@
-import requests
-import datetime
-import yaml
 import argparse
+import datetime
+
+import requests
+import yaml
 
 """
 base url for book/unbook:
@@ -93,7 +94,57 @@ def initialize_parser() -> dict:
 
 
 def parse_day(day):
-    pass
+    """
+    Parses the day into text if input
+    is number and vice versa.
+
+    Args:
+        day(int|str): input day as (int 0-6 || str )
+    """
+    day_parsed = None
+    err_msg = None
+    if isinstance(day, str):
+        day = day.lower()
+        match day:
+            case "monday":
+                day_parsed = 0
+            case "tuesday":
+                day_parsed = 1
+            case "wednesday":
+                day_parsed = 2
+            case "thursday":
+                day_parsed = 3
+            case "friday":
+                day_parsed = 4
+            case "saturday":
+                day_parsed = 5
+            case "sunday":
+                day_parsed = 6
+            case _:
+                err_msg = f"str: {day}"
+    if isinstance(day, int):
+        match day:
+            case 0:
+                day_parsed = "Monday"
+            case 1:
+                day_parsed = "Tuesday"
+            case 2:
+                day_parsed = "Wednesday"
+            case 3:
+                day_parsed = "Thursday"
+            case 4:
+                day_parsed = "Friday"
+            case 5:
+                day_parsed = "Saturday"
+            case 6:
+                day_parsed = "Sunday"
+            case _:
+                err_msg = f"int: {day}"
+
+    if err_msg:
+        raise ValueError(f"Could not parse day input {err_msg}")
+
+    return day_parsed
 
 
 def get_date(offset: int, verbose=False):
@@ -104,11 +155,11 @@ def get_date(offset: int, verbose=False):
         print(
             f"""
     Today -v-
-    "Datetime is: {dt}"
-    "Weekday is: {dt.isoweekday()}"
+    Datetime is: {dt}"
+    Weekday is: {parse_day(dt.isoweekday())}"
     Offset day -v-
-    "Datetime is: {new_date}"
-    "Weekday is: {new_date.isoweekday()}"
+    Datetime is: {new_date}"
+    Weekday is: {parse_day(new_date.isoweekday())}"
             """)
 
     return new_date
