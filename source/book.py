@@ -230,6 +230,7 @@ def main():
         print(">--headers-end--<")
 
     with requests.session() as s:
+        booking_urls = []
         s.post(config["url"]["login"], json=payload)
         r = s.get(config["url"]["home"])
         r = s.get(config["url"]["book"])
@@ -237,7 +238,6 @@ def main():
         r = s.get(specific_url, headers=headers)
 
         activity_dict = r.json()
-        foundSomething = False
         for act in activity_dict["activities"]:
             for book_act in book_acts:
                 if book_act["name"] in act["ActivityType"]["name"]\
@@ -257,16 +257,16 @@ def main():
                         "activities/participate/"
                         f"{act['Activity']['id']}/?force=1"
                     )
-                    if not input_vars["test"] and not foundSomething:
-                        s.post(booking_url, headers=headers)
-                    else:
-                        print("Booking url that would be used:")
-                        print(booking_url)
-
-                    foundSomething = True
-
-    if not foundSomething:
-        print("No matching activity was found, sorry about that.")
+                    booking_urls.append(booking_url)
+        if booking_urls:
+            for burl in booking_urls:
+                if input_vars["test"]:
+                    print("Booking url that would be used:")
+                    print(burl)
+                else:
+                    s.post(burl, headers=headers)
+        else:
+            print("No matching activity was found, sorry about that.")
 
 
 if __name__ == "__main__":
