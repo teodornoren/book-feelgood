@@ -103,10 +103,10 @@ def get_date(offset: int, verbose=False):
     if verbose:
         print(
             f"""
-    Today -v-"
+    Today -v-
     "Datetime is: {dt}"
     "Weekday is: {dt.isoweekday()}"
-    Offset day -v-"
+    Offset day -v-
     "Datetime is: {new_date}"
     "Weekday is: {new_date.isoweekday()}"
             """)
@@ -172,19 +172,20 @@ def main():
         activity_dict = r.json()
         foundSomething = False
         for act in activity_dict["activities"]:
-            # Create config file for activity type and time
-
             if config["activity"]["name"] in act["ActivityType"]["name"]\
                 and\
                     config["activity"]["time"] in act["Activity"]["start"]:
                 print(
-                    "Found activity matching: "
-                    f"{config['activity']['name']}"
-                    f" at time: {config['activity']['time']}"
-                    )
-                print(act["ActivityType"]["name"])
-                print(act["Activity"]["id"])
-                print(act["Activity"]["start"])
+                    f"""
+                    Found activity matching:
+                    Name: {config['activity']['name']}
+                    Time: {config['activity']['time']}
+                    Activity details:
+                        {act["ActivityType"]["name"]}
+                        {act["Activity"]["id"]}
+                        {act["Activity"]["start"]}
+                    """
+                )
                 booking_url = (
                     "https://feelgood.wondr.se/w_booking/"
                     f"activities/participate/{act['Activity']['id']}/?force=1"
