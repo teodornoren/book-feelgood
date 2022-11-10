@@ -147,6 +147,11 @@ def parse_day(day):
     return day_parsed
 
 
+def print_dict(dictionary: dict):
+    for key, item in dictionary.items():
+        print(f"{key}: {item}")
+
+
 def get_date(offset: int, verbose=False):
     dt = datetime.date.today()
     new_date = dt - datetime.timedelta(days=-offset)
@@ -204,10 +209,12 @@ def main():
     book_acts = []
     for act in activities["activities"]:
         if date_next_week.isoweekday() == parse_day(act["day"]):
-            print(f"Config day matches, will book for {act}")
+            print("Activity day matches, will book for:")
+            print_dict(act)
             book_acts.append(act)
         else:
-            print(f"Config day mismatch for {act}")
+            print("Activity day mismatch for:")
+            print_dict(act)
 
     if not book_acts:
         print("No activities to book today, bye!")
@@ -246,17 +253,15 @@ def main():
                 if book_act["name"] in act["ActivityType"]["name"]\
                     and\
                         book_act["time"] in act["Activity"]["start"]:
-                    print(
-                        f"""
-                        Found activity matching:
-                        Name: {book_act['name']}
-                        Time: {book_act['time']}
-                        Activity details:
-                            {act["ActivityType"]["name"]}
-                            {act["Activity"]["id"]}
-                            {act["Activity"]["start"]}
-                        """
-                    )
+                    print(f"""
+    Found activity matching:
+    Name: {book_act['name']}
+    Time: {book_act['time']}
+    Activity details:
+        {act["ActivityType"]["name"]}
+        {act["Activity"]["id"]}
+        {act["Activity"]["start"]}
+                        """)
                     booking_url = (
                         "https://feelgood.wondr.se/w_booking/"
                         "activities/participate/"
