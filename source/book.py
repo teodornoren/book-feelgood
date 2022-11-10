@@ -232,11 +232,10 @@ def main():
             }
         }
 
-    headers = read_yaml("source/headers.yml")
+    headers = config["headers"]
     if (input_vars["test"]):
         print(">--headers-start-<")
-        for header, value in headers.items():
-            print(f"    {header}: {value}")
+        print_dict(headers)
         print(">--headers-end--<")
 
     with requests.session() as s:
