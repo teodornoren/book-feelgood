@@ -67,9 +67,15 @@ def initialize_parser() -> dict:
 
     parser.add_argument(
         "-t", "--time",
-        help="Add an optional time if you do not want to use the config time",
+        help="Add an optional time in place of config",
         required=False,
     )
+
+    parser.add_argument(
+        "-a", "--activity",
+        help="Add optional activity in place of config",
+        required=False
+        )
 
     parsed = parser.parse_args()
     input_vars = {
@@ -80,6 +86,8 @@ def initialize_parser() -> dict:
 
     if parsed.time:
         input_vars["time"] = parsed.time
+    if parsed.activity:
+        input_vars["activity"] = parsed.activity
 
     return input_vars
 
@@ -129,9 +137,11 @@ def main():
 
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
-    specific_url = f"https://feelgood.wondr.se/w_booking/activities/list?from=\
-        {date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&\
-            type=&only_try_it=0&facility=60a7ac3f-b774-4228-a9a3-056c0a10010d"
+    specific_url = (
+        "https://feelgood.wondr.se/w_booking/activities/list?from="
+        f"{date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&"
+        f"type=&only_try_it=0&facility={config['facility']}"
+    )
 
     payload = {
         "User": {
