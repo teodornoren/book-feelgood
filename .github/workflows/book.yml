@@ -1,8 +1,8 @@
-name: Book activity
+name: Book activities
 
 on:
   schedule:
-    - cron: '0 7 * * THU'
+    - cron: '0 7 * * *'
   workflow_dispatch:
 
 jobs:

@@ -155,10 +155,10 @@ def get_date(offset: int, verbose=False):
         print(
             f"""
     Today -v-
-    Datetime is: {dt}"
+    Datetime is: {dt}
     Weekday is: {parse_day(dt.isoweekday())}
     Offset day -v-
-    Datetime is: {new_date}"
+    Datetime is: {new_date}
     Weekday is: {parse_day(new_date.isoweekday())}
             """)
 
@@ -187,8 +187,14 @@ def main():
             f" the config time of: {config['activity']['time']}"
             )
         config["activity"]["time"] = input_vars["time"]
-
+    # Offset of 6 is the maximum that new activities appear
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
+
+    # Check if date_next_week matches the config day
+    if date_next_week.isoweekday() in parse_day(config["day"]):
+        print("Config day matches, proceeding with booking")
+    else:
+        print("Config day mismatch, exiting...")
 
     specific_url = (
         "https://feelgood.wondr.se/w_booking/activities/list?from="
