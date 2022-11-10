@@ -114,15 +114,17 @@ def get_date(offset: int, verbose=False):
     return new_date
 
 
+def splash():
+    banner = read_yaml("source/banner.yml")
+    print(banner["banner"])
+
+
 def main():
     """get parser args"""
 
-    banner = read_yaml("source/banner.yml")
-
-    print(banner["banner"])
+    splash()
 
     config = read_yaml("source/config.yml")
-
     input_vars = initialize_parser()
 
     if (input_vars["test"]):
@@ -152,7 +154,11 @@ def main():
 
     headers = read_yaml("source/headers.yml")
     if (input_vars["test"]):
-        print(headers)
+        print(">--Headers--<")
+        for header, value in headers.items():
+            print(f"    {header}: {value}")
+        print(">--end--<")
+
     print(f"Match activity string : {config['activity']['name']}")
     print(f"Match activity time   : {config['activity']['time']}")
 
