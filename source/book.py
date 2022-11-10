@@ -94,13 +94,13 @@ def get_date(offset: int, verbose=False):
 
     if verbose:
         print(
-            "Today -v-"
-            f"Datetime is: {dt}"
-            f"Weekday is: {dt.isoweekday}"
-            "Offset day -v-"
-            f"Datetime is: {new_date}"
-            f"Weekday is: {new_date.isoweekday}"
-            )
+            f"""Today -v-"
+            "Datetime is: {dt}"
+            "Weekday is: {dt.isoweekday}"
+            Offset day -v-"
+            "Datetime is: {new_date}"
+            "Weekday is: {new_date.isoweekday}"
+            """)
 
     return new_date
 
@@ -121,12 +121,12 @@ def main():
 
     if ("time" in input_vars):
         print(
-            f"An input time of {input_vars['time']} overrides"
-            f"the config time of: {config['activity']['time']}"
+            f"An input time of {input_vars['time']} overrides "
+            f" the config time of: {config['activity']['time']}"
             )
         config["activity"]["time"] = input_vars["time"]
 
-    date_next_week = get_date(offset=6)
+    date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
     specific_url = f"https://feelgood.wondr.se/w_booking/activities/list?from=\
         {date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&\
@@ -140,7 +140,8 @@ def main():
         }
 
     headers = read_yaml("source/headers.yml")
-
+    if (input_vars["test"]):
+        print(headers)
     print(f"Match activity string : {config['activity']['name']}")
     print(f"Match activity time   : {config['activity']['time']}")
 
@@ -160,9 +161,9 @@ def main():
                 and\
                     config["activity"]["time"] in act["Activity"]["start"]:
                 print(
-                    "Found activity matching:"
+                    "Found activity matching: "
                     f"{config['activity']['name']}"
-                    f"at time: {config['activity']['time']}"
+                    f" at time: {config['activity']['time']}"
                     )
                 print(act["ActivityType"]["name"])
                 print(act["Activity"]["id"])
