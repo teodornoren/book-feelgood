@@ -253,8 +253,7 @@ def main():
         {act["Activity"]["start"]}
                         """)
                     booking_url = (
-                        "https://feelgood.wondr.se/w_booking/"
-                        "activities/participate/"
+                        f"{config['url']['participate']}"
                         f"{act['Activity']['id']}/?force=1"
                     )
                     booking_urls.append(booking_url)

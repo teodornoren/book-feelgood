@@ -3,6 +3,7 @@ url:
   login: https://feelgood.wondr.se/
   home: https://feelgood.wondr.se/users/start
   book: https://feelgood.wondr.se/schema
+  participate: https://feelgood.wondr.se/w_booking/activities/participate/
 headers:
   Accept-Encoding: gzip, deflate, br
   Referer: https://feelgood.wondr.se/w_booking/activities
