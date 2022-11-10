@@ -156,10 +156,10 @@ def get_date(offset: int, verbose=False):
             f"""
     Today -v-
     Datetime is: {dt}"
-    Weekday is: {parse_day(dt.isoweekday())}"
+    Weekday is: {parse_day(dt.isoweekday())}
     Offset day -v-
     Datetime is: {new_date}"
-    Weekday is: {parse_day(new_date.isoweekday())}"
+    Weekday is: {parse_day(new_date.isoweekday())}
             """)
 
     return new_date
