@@ -147,12 +147,16 @@ def parse_day(day):
     return day_parsed
 
 
-def print_dict(dictionary: dict):
+def print_dict(dictionary: dict, indent: int = 0):
+    offset = ""
+    for _ in range(0, indent):
+        offset = f"{offset}  "
     for key, item in dictionary.items():
         if isinstance(item, dict):
-            print_dict(item)
+            print(key)
+            print_dict(item, indent=indent+1)
         else:
-            print(f"{key}: {item}")
+            print(f"{offset}{key}: {item}")
 
 
 def get_date(offset: int, verbose=False):
@@ -232,7 +236,7 @@ def main():
 
     with requests.session() as s:
         booking_urls = []
-        s.post(f"{urls['base_url']}{urls['login']}", json=payload)
+        s.post(f"{urls['base_url']}", json=payload)
         # r = s.get(config["url"]["home"])
         # r = s.get(config["url"]["book"])
 
