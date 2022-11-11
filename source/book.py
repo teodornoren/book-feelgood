@@ -142,14 +142,17 @@ def parse_day(day):
                 err_msg = f"int: {day}"
 
     if err_msg:
-        raise ValueError(f"Could not parse day input {err_msg}")
+        raise ValueError(f"Could not parse input as a day: {err_msg}")
 
     return day_parsed
 
 
 def print_dict(dictionary: dict):
     for key, item in dictionary.items():
-        print(f"{key}: {item}")
+        if isinstance(item, dict):
+            print_dict(item)
+        else:
+            print(f"{key}: {item}")
 
 
 def get_date(offset: int, verbose=False):
@@ -181,11 +184,15 @@ def main():
     splash()
 
     config = read_yaml("source/config.yml")
+    urls = config["urls"]
     activities = read_yaml("activities.yml")
     input_vars = initialize_parser()
+    headers = config["headers"]
 
     if (input_vars["test"]):
         print("---running as test, no booking will be made---")
+        print("config loaded:")
+        print_dict(config)
 
     if ("time" in input_vars):
         print(
@@ -211,7 +218,7 @@ def main():
         print("No activities to book today, bye!")
 
     specific_url = (
-        "https://feelgood.wondr.se/w_booking/activities/list?from="
+        f"{urls['base_url']}w_booking/activities/list?from="
         f"{date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&"
         f"type=&only_try_it=0&facility={activities['facility']}"
     )
@@ -223,17 +230,11 @@ def main():
             }
         }
 
-    headers = config["headers"]
-    if (input_vars["test"]):
-        print(">--headers-start-<")
-        print_dict(headers)
-        print(">--headers-end--<")
-
     with requests.session() as s:
         booking_urls = []
-        s.post(config["url"]["login"], json=payload)
-        r = s.get(config["url"]["home"])
-        r = s.get(config["url"]["book"])
+        s.post(f"{urls['base_url']}{urls['login']}", json=payload)
+        # r = s.get(config["url"]["home"])
+        # r = s.get(config["url"]["book"])
 
         r = s.get(specific_url, headers=headers)
 
@@ -253,7 +254,7 @@ def main():
         {act["Activity"]["start"]}
                         """)
                     booking_url = (
-                        f"{config['url']['participate']}"
+                        f"{urls['participate']}"
                         f"{act['Activity']['id']}/?force=1"
                     )
                     booking_urls.append(booking_url)
