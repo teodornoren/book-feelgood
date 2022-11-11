@@ -226,7 +226,7 @@ def main():
             print("Activity day mismatch for:")
             print_dict(act)
 
-    if not book_acts and not input_vars["test"]:
+    if not book_acts:
         print("No activities to book today, bye!")
         exit(0)
 
@@ -256,8 +256,7 @@ def main():
         # r = s.get(config["url"]["book"])
 
         r = s.get(get_activities_url, headers=headers)
-        if input_vars["test"]:
-            print_dict(r.json())
+
         activity_dict = r.json()
         for act in activity_dict["activities"]:
             for book_act in book_acts:
