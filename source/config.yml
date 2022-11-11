@@ -2,8 +2,9 @@
 urls:
   base_url: https://feelgood.wondr.se/
   home: users/start
-  book: schema
+  schema: schema
   participate: w_booking/activities/participate/
+  list: w_booking/activities/list
 headers:
   Accept-Encoding: gzip, deflate, br
   Referer: https://feelgood.wondr.se/w_booking/activities
