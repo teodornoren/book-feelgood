@@ -175,8 +175,8 @@ Today:
   Weekday is: {parse_day(dt.isoweekday())}
 Offset day:
   Datetime is: {new_date}
-  Weekday is: {parse_day(new_date.isoweekday())}
-            """)
+  Weekday is: {parse_day(new_date.isoweekday())}"""
+            )
 
     return new_date
 
@@ -224,6 +224,7 @@ def main():
 
     if not book_acts:
         print("No activities to book today, bye!")
+        exit(0)
 
     specific_url = (
         f"{urls['base_url']}w_booking/activities/list?from="
