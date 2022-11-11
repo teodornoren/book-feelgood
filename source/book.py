@@ -160,7 +160,7 @@ def print_dict(dictionary: dict, indent: int = 0):
         if isinstance(item, dict):
             print_dict(item, indent=indent+1)
         elif isinstance(item, list):
-            for i in item():
+            for i in item:
                 print_dict(i, indent=indent+1)
         else:
             print(f" {item}")
