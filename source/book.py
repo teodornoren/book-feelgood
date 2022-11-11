@@ -157,7 +157,7 @@ def print_dict(dictionary: dict, indent: int = 0):
         offset = f"{offset}  "
     for key, item in dictionary.items():
         if isinstance(item, dict):
-            print(f"{key}:")
+            print(f"{offset}{key}:")
             print_dict(item, indent=indent+1)
         else:
             print(f"{offset}{key}: {item}")
