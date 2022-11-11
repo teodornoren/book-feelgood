@@ -156,11 +156,14 @@ def print_dict(dictionary: dict, indent: int = 0):
     for _ in range(0, indent):
         offset = f"{offset}  "
     for key, item in dictionary.items():
+        print(f"{offset}{key}:")
         if isinstance(item, dict):
-            print(f"{offset}{key}:")
             print_dict(item, indent=indent+1)
+        elif isinstance(item, list):
+            for i in item():
+                print_dict(i, indent=indent+1)
         else:
-            print(f"{offset}{key}: {item}")
+            print(f" {item}")
 
 
 def get_date(offset: int, verbose=False):
