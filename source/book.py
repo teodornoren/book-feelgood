@@ -222,31 +222,38 @@ def main():
             print("Activity day mismatch for:")
             print_dict(act)
 
-    if not book_acts:
+    if not book_acts and not input_vars["test"]:
         print("No activities to book today, bye!")
         exit(0)
 
-    specific_url = (
-        f"{urls['base_url']}w_booking/activities/list?from="
-        f"{date_next_week}&to={date_next_week}&today=0&location=&user=&mine=0&"
-        f"type=&only_try_it=0&facility={activities['facility']}"
-    )
+    with requests.session() as s:
+        get_activities_url = (
+            f"{urls['base_url']}{urls['list']}"
+            f"?from={date_next_week}"
+            f"&to={date_next_week}"
+            "&today=0"
+            "&location="
+            "&user="
+            "&mine=0&type="
+            "&only_try_it=0"
+            f"&facility={activities['facility']}"
+        )
 
-    payload = {
-        "User": {
-            "email": input_vars["username"],
-            "password": input_vars["password"]
-            }
+        payload = {
+            "User": {
+                "email": input_vars["username"],
+                "password": input_vars["password"]
+                }
         }
 
-    with requests.session() as s:
         booking_urls = []
         s.post(f"{urls['base_url']}", json=payload)
         # r = s.get(config["url"]["home"])
         # r = s.get(config["url"]["book"])
 
-        r = s.get(specific_url, headers=headers)
-
+        r = s.get(get_activities_url, headers=headers)
+        if input_vars["test"]:
+            print_dict(r.json())
         activity_dict = r.json()
         for act in activity_dict["activities"]:
             for book_act in book_acts:
