@@ -9,7 +9,7 @@ on:
 
 jobs:
   book:
-    runs-on: KAV
+    runs-on: [self-hosted, KAV]
     steps:
       - uses: actions/checkout@v3
       

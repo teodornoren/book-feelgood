@@ -17,12 +17,3 @@ headers:
   sec-ch-ua-mobile: "?0"
   sec-ch-ua-platform: Windows
   x-requested-with: XMLHttpRequest
-cool:
-  Good: "Test"
-  Very:
-    Nice: "Indendation"
-    You: "Got"
-    There:
-      Shame: if someone
-      Would:
-        Ruin: it
