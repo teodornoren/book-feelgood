@@ -89,6 +89,10 @@ def initialize_parser() -> dict:
         input_vars["time"] = parsed.time
     if parsed.activity:
         input_vars["activity"] = parsed.activity
+    input_censor = input_vars
+    if input_vars["test"]:
+        input_censor["password"] = "**********"
+        print_dict(input_censor)
 
     return input_vars
 
@@ -153,7 +157,7 @@ def print_dict(dictionary: dict, indent: int = 0):
         offset = f"{offset}  "
     for key, item in dictionary.items():
         if isinstance(item, dict):
-            print(key)
+            print(f"{key}:")
             print_dict(item, indent=indent+1)
         else:
             print(f"{offset}{key}: {item}")
@@ -166,12 +170,12 @@ def get_date(offset: int, verbose=False):
     if verbose:
         print(
             f"""Verbose mode for get_date:
-    Today -v-
-    Datetime is: {dt}
-    Weekday is: {parse_day(dt.isoweekday())}
-    Offset day -v-
-    Datetime is: {new_date}
-    Weekday is: {parse_day(new_date.isoweekday())}
+Today:
+  Datetime is: {dt}
+  Weekday is: {parse_day(dt.isoweekday())}
+Offset day:
+  Datetime is: {new_date}
+  Weekday is: {parse_day(new_date.isoweekday())}
             """)
 
     return new_date
