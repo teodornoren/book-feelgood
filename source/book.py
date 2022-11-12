@@ -273,6 +273,7 @@ def main():
         {act["Activity"]["start"]}
                         """)
                     booking_url = (
+                        f"{urls['base_url']}"
                         f"{urls['participate']}"
                         f"{act['Activity']['id']}/?force=1"
                     )
