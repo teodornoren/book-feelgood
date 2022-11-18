@@ -6,6 +6,8 @@ on:
       time:
         type: string
         description: time the activity starts
+  repository_dispatch:
+    types: [ book_test ]
 
 jobs:
   book:
