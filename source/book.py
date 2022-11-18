@@ -264,14 +264,14 @@ def main():
                     and\
                         book_act["time"] in act["Activity"]["start"]:
                     print(f"""
-    Found activity matching:
-    Name: {book_act['name']}
-    Time: {book_act['time']}
-    Activity details:
-        {act["ActivityType"]["name"]}
-        {act["Activity"]["id"]}
-        {act["Activity"]["start"]}
-                        """)
+Found activity matching:
+Name: {book_act['name']}
+Time: {book_act['time']}
+Activity details:
+    {act["ActivityType"]["name"]}
+    {act["Activity"]["id"]}
+    {act["Activity"]["start"]}
+                    """)
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
