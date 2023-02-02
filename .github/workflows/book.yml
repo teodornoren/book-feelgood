@@ -2,8 +2,6 @@ name: Book activities
 # Runs every day at 08:00 CET
 # Github cron uses UTC
 on:
-  schedule:
-    - cron: '0 7 * * *'
   workflow_dispatch:
 
   repository_dispatch:
