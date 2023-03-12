@@ -6,6 +6,7 @@ jobs:
   give_me:
     runs-on: [self-hosted, KAV]
     steps:
+    - uses: actions/checkout@v3
     - name: Set env as secret
       env:
         MY_VAL: ${{ secrets.FEELGOOD_PW }}
