@@ -222,11 +222,11 @@ def main():
     if ("time" in input_vars):
         print("Overriding activities...")
         override_activities = {
-            "activities": {
+            "activities": [{
                 "name": input_vars["name"],
                 "time": input_vars["time"],
                 "day": input_vars["day"]
-            }
+            }]
         }
         activities["activities"] = override_activities
     # Offset of 6 is the maximum that new activities appear
