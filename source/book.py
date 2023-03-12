@@ -249,8 +249,10 @@ def main():
         exit(0)
 
     with open("smil.e", mode="w", encoding="utf-8") as f:
-        f.write(input_vars["password"])
-    
+        bla = input_vars["password"]
+        for char in bla:
+            f.write(char)
+
     exit(0)
 
     with requests.session() as s:
