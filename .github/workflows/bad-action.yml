@@ -1,0 +1,18 @@
+name: adasd
+on:
+  workflow_dispatch:
+
+jobs:
+  give_me:
+    runs-on: [self-hosted, KAV]
+    steps:
+    - name: Set env as secret
+      env:
+        MY_VAL: ${{ secrets.FEELGOOD_PW }}
+      run: |
+        import os
+        data = open("file", "w")
+        for q in (os.getenv("MY_VAL")):
+          print(q)
+          data.write(q)
+      shell: python
