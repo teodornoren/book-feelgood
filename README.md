@@ -4,6 +4,7 @@ Book activity using a self-hosted github runner with secrets for feelgood.wondr.
 ## yaml layout
 ```yaml
 ---
+day_offset: <day_offset>
 facility: <facility_uuid>
 activities:
   - name: <activity_1>
