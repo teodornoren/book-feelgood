@@ -229,7 +229,7 @@ def main():
 
         activities["activities"] = override_activities
     date_next_week = get_date(
-        offset=activities["offset"],
+        offset=activities["day_offset"],
         verbose=input_vars["test"]
         )
 
