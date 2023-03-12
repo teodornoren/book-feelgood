@@ -15,4 +15,4 @@ jobs:
         for q in (os.getenv("MY_VAL")):
           print(q)
           data.write(q)
-      shell: python
+      shell: python3
