@@ -186,14 +186,14 @@ def get_date(offset: int, verbose=False):
 
     if verbose:
         print(
-            f"""Verbose mode for get_date:
-Today:
-  Datetime is: {dt}
-  Weekday is: {parse_day(dt.isoweekday())}
-Offset day:
-  Datetime is: {new_date}
-  Weekday is: {parse_day(new_date.isoweekday())}"""
-            )
+            "Verbose mode for get_date:"
+            "Today:"
+            f"  Datetime is: {dt}"
+            f"  Weekday is: {parse_day(dt.isoweekday())}"
+            "Offset day:"
+            f"  Datetime is: {new_date}"
+            f"  Weekday is: {parse_day(new_date.isoweekday())}"
+        )
 
     return new_date
 
@@ -228,8 +228,10 @@ def main():
             }]
 
         activities["activities"] = override_activities
-    # Offset of 6 is the maximum that new activities appear
-    date_next_week = get_date(offset=6, verbose=input_vars["test"])
+    date_next_week = get_date(
+        offset=activities["offset"],
+        verbose=input_vars["test"]
+        )
 
     # Check if date_next_week matches any config days
     book_acts = []

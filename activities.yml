@@ -1,5 +1,5 @@
 ---
-#This file contains the activities that we want to book and the facility to use
+day_offset: 10
 facility: 60a7ac3f-b774-4228-a9a3-056c0a10010d
 activities:
   - name: Spinning
