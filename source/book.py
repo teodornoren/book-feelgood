@@ -73,10 +73,16 @@ def initialize_parser() -> dict:
     )
 
     parser.add_argument(
-        "-a", "--activity",
-        help="Add optional activity in place of config",
+        "-n", "--name",
+        help="Add optional name in place of config",
         required=False
         )
+
+    parser.add_argument(
+        "-d", "--day",
+        help="Add optional day in place of config",
+        required=False
+    )
 
     parsed = parser.parse_args()
     input_vars = {
@@ -85,10 +91,17 @@ def initialize_parser() -> dict:
         "test": parsed.test
     }
 
-    if parsed.time:
+    if parsed.time and parsed.name and parsed.day:
         input_vars["time"] = parsed.time
-    if parsed.activity:
-        input_vars["activity"] = parsed.activity
+        input_vars["name"] = parsed.name
+        input_vars["day"] = parsed.day
+    elif not parsed.time and not parsed.name and not parsed.day:
+        pass
+    else:
+        raise parser.error(
+            "Need to specify input name, time and day"
+            )
+
     input_censor = input_vars
     if input_vars["test"]:
         input_censor["password"] = "**********"
@@ -207,11 +220,15 @@ def main():
         print_dict(config)
 
     if ("time" in input_vars):
-        print(
-            f"An input time of {input_vars['time']} overrides "
-            f" the config time of:{config['activities']['time']}"
-            )
-        config["activties"]["time"] = input_vars["time"]
+        print("Overriding activities...")
+        override_activities = {
+            activities: {
+                "name": input_vars["name"],
+                "time": input_vars["time"],
+                "day": input_vars["day"]
+            }
+        }
+        activities["activities"] = override_activities
     # Offset of 6 is the maximum that new activities appear
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
@@ -252,8 +269,6 @@ def main():
 
         booking_urls = []
         s.post(f"{urls['base_url']}", json=payload)
-        # r = s.get(config["url"]["home"])
-        # r = s.get(config["url"]["book"])
 
         r = s.get(get_activities_url, headers=headers)
 
