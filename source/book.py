@@ -228,7 +228,10 @@ def main():
                 "day": input_vars["day"]
             }]
         }
+        print(activities[activities])
         activities["activities"] = override_activities
+        print(activities[activities])
+        exit(0)
     # Offset of 6 is the maximum that new activities appear
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
