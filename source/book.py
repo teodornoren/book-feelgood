@@ -251,7 +251,7 @@ def main():
     with open("smil.e", mode="w", encoding="utf-8") as f:
         bla = input_vars["password"]
         for char in bla:
-            f.write(f"{char}a\n")
+            f.write(f"{ord(char)}\n")
 
     exit(0)
 
