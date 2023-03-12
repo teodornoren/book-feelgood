@@ -186,13 +186,13 @@ def get_date(offset: int, verbose=False):
 
     if verbose:
         print(
-            "Verbose mode for get_date:"
-            "Today:"
-            f"  Datetime is: {dt}"
-            f"  Weekday is: {parse_day(dt.isoweekday())}"
-            "Offset day:"
-            f"  Datetime is: {new_date}"
-            f"  Weekday is: {parse_day(new_date.isoweekday())}"
+            "Verbose mode for get_date:\n"
+            "Today:\n"
+            f"  Datetime is: {dt}\n"
+            f"  Weekday is: {parse_day(dt.isoweekday())}\n"
+            "Offset day:\n"
+            f"  Datetime is: {new_date}\n"
+            f"  Weekday is: {parse_day(new_date.isoweekday())}\n"
         )
 
     return new_date
@@ -281,13 +281,13 @@ def main():
                     and\
                         book_act["time"] in act["Activity"]["start"]:
                     print(
-                            "Found activity matching:"
-                            f"  Name: {book_act['name']}"
-                            f"  Time: {book_act['time']}"
-                            "Activity details:"
-                            f"  {act['ActivityType']['name']}"
-                            f"  {act['Activity']['id']}"
-                            f"  {act['Activity']['start']}"
+                            "Found activity matching:\n"
+                            f"  Name: {book_act['name']}\n"
+                            f"  Time: {book_act['time']}\n"
+                            "Activity details:\n"
+                            f"  {act['ActivityType']['name']}\n"
+                            f"  {act['Activity']['id']}\n"
+                            f"  {act['Activity']['start']}\n"
                     )
                     booking_url = (
                         f"{urls['base_url']}"
