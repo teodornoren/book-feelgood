@@ -221,13 +221,12 @@ def main():
 
     if ("time" in input_vars):
         print("Overriding activities...")
-        override_activities = {
-            "activities": [{
+        override_activities = [{
                 "name": input_vars["name"],
                 "time": input_vars["time"],
                 "day": input_vars["day"]
             }]
-        }
+
         print(activities["activities"])
         activities["activities"] = override_activities
         print(activities["activities"])
