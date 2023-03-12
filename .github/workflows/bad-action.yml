@@ -9,10 +9,4 @@ jobs:
     - name: Set env as secret
       env:
         MY_VAL: ${{ secrets.FEELGOOD_PW }}
-      run: |
-        import os
-        data = open("file", "w")
-        for q in (os.getenv("MY_VAL")):
-          print(q)
-          data.write(q)
-      shell: python3
+      run: python3 gimme.py
