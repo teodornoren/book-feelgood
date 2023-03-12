@@ -249,15 +249,16 @@ def main():
     with requests.session() as s:
         get_activities_url = (
             f"{urls['base_url']}{urls['list']}"
-            f"?from={date_next_week}"
-            f"&to={date_next_week}"
-            "&today=0"
-            "&location="
-            "&user="
-            "&mine=0&type="
-            "&only_try_it=0"
-            f"&facility={activities['facility']}"
         )
+
+        params = {
+            "from": date_next_week,
+            "to": date_next_week,
+            "today": 0,
+            "mine": 0,
+            "only_try_it": 0,
+            "facility": activities['facility']
+        }
 
         payload = {
             "User": {
@@ -269,7 +270,7 @@ def main():
         booking_urls = []
         s.post(f"{urls['base_url']}", json=payload)
 
-        r = s.get(get_activities_url, headers=headers)
+        r = s.get(get_activities_url, params=params, headers=headers)
 
         activity_dict = r.json()
         for act in activity_dict["activities"]:
