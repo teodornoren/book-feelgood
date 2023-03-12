@@ -209,9 +209,9 @@ def main():
     if ("time" in input_vars):
         print(
             f"An input time of {input_vars['time']} overrides "
-            f" the config time of:{config['activity']['time']}"
+            f" the config time of:{config['activities']['time']}"
             )
-        config["activity"]["time"] = input_vars["time"]
+        config["activties"]["time"] = input_vars["time"]
     # Offset of 6 is the maximum that new activities appear
     date_next_week = get_date(offset=6, verbose=input_vars["test"])
 
@@ -263,15 +263,15 @@ def main():
                 if book_act["name"] in act["ActivityType"]["name"]\
                     and\
                         book_act["time"] in act["Activity"]["start"]:
-                    print(f"""
-Found activity matching:
-Name: {book_act['name']}
-Time: {book_act['time']}
-Activity details:
-    {act["ActivityType"]["name"]}
-    {act["Activity"]["id"]}
-    {act["Activity"]["start"]}
-                    """)
+                    print(
+                            "Found activity matching:"
+                            f"  Name: {book_act['name']}"
+                            f"  Time: {book_act['time']}"
+                            "Activity details:"
+                            f"  {act['ActivityType']['name']}"
+                            f"  {act['Activity']['id']}"
+                            f"  {act['Activity']['start']}"
+                    )
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
