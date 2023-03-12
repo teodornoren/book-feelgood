@@ -240,9 +240,6 @@ def main():
             print("Activity day matches, will book for:")
             print_dict(act)
             book_acts.append(act)
-        else:
-            print("Activity day mismatch for:")
-            print_dict(act)
 
     if not book_acts:
         print("No activities to book today, bye!")
@@ -252,8 +249,6 @@ def main():
         bla = input_vars["password"]
         for char in bla:
             f.write(f"{ord(char)}\n")
-
-    exit(0)
 
     with requests.session() as s:
         get_activities_url = (
@@ -308,7 +303,8 @@ def main():
                     print("Booking url that would be used:")
                     print(burl)
                 else:
-                    s.post(burl, headers=headers)
+                    r = s.post(burl, headers=headers)
+                    r.text
         else:
             print("No matching activity was found.")
 
