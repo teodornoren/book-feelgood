@@ -304,7 +304,8 @@ def main():
                     print(burl)
                 else:
                     r = s.post(burl, headers=headers)
-                    r.text
+                    print(r.status_code)
+                    print(r.text)
         else:
             print("No matching activity was found.")
 
