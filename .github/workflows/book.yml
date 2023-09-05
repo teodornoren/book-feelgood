@@ -1,11 +1,9 @@
 name: Book activities
-# Runs every day at 08:00 CET
-# Github cron uses UTC
 on:
   workflow_dispatch:
 
   repository_dispatch:
-    types: [ book ]
+    types: book
 
 jobs:
   book:
@@ -13,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: install requirements
-        run: python3 -m pip install -r source/requirements.txt
-        
       - name: Run booking action 1
         run: python3 source/book.py -usr ${{ secrets.FEELGOOD_USER }} -pw ${{ secrets.FEELGOOD_PW }}
 
