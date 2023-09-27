@@ -309,7 +309,7 @@ def main():
                 }
 
                 if book_act["name"] == "Boka":
-                    payload["book_start"] = str(int(datetime.datetime.combine(date_next_week, datetime.time(payload["start_time"])).timestamp()))
+                    payload["book_start"] = str(int(datetime.datetime.combine(date_next_week, datetime.time(book_act["start_time"])).timestamp()))
                     payload["book_length"] = "30"
                 
                 if input_vars["test"]:
