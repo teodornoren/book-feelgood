@@ -279,9 +279,10 @@ def main():
         activity_dict = r.json()
         for act in activity_dict["activities"]:
             for book_act in book_acts:
-                if book_act["name"] in act["ActivityType"]["name"]\
-                    and\
-                        book_act["time"] in act["Activity"]["start"]:
+                if (
+                        book_act["name"] in act["ActivityType"]["name"] and
+                        book_act["time"] in act["Activity"]["start"]
+                ):
                     print(
                             "Found activity matching:\n"
                             f"  Name: {book_act['name']}\n"
@@ -299,11 +300,23 @@ def main():
                     booking_urls.append(booking_url)
         if booking_urls:
             for burl in booking_urls:
+                payload = {
+                    "ActivityBooking": {
+                        "participants": 1,
+                        "resources": {}
+                    },
+                    "send_confirmation": 1
+                }
+                
                 if input_vars["test"]:
+                    print("Book act name")
+                    print(book_act["name"])
                     print("Booking url that would be used:")
                     print(burl)
+                    print("Payload that would be used:")
+                    print(payload)
                 else:
-                    r = s.post(burl, headers=headers)
+                    r = s.post(burl, headers=headers, json=payload)
                     print(r.status_code)
                     print(r.text)
         else:
