@@ -310,8 +310,8 @@ def main():
 
                 if book_act["name"] == "Boka":
                     epoch = int(datetime.datetime.combine(date_next_week, datetime.time(int(book_act["start_time"]))).timestamp())
-                    payload["book_start"] = str(epoch)
-                    payload["book_length"] = "30"
+                    payload["ActivityBooking"]["book_start"] = str(epoch)
+                    payload["ActivityBooking"]["book_length"] = "30"
                     print(payload)
                 
                 if input_vars["test"]:
