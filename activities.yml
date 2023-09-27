@@ -5,6 +5,9 @@ activities:
   - name: Badminton
     time: "17:05"
     day: Monday
+  - name: Boka
+    time: "08:00"
+    day: Monday
   - name: Badminton
     time: "15:00"
     day: Wednesday
