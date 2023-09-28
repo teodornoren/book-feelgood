@@ -154,7 +154,8 @@ def book(
         print("---running as test, no booking will be made---")
         print("config loaded:")
         print_dict(config)
-
+        print("DAY OFF AND ST")
+        print(day_offset, start_time)
         if (
             name and
             time and
