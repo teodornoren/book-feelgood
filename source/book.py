@@ -318,7 +318,7 @@ def main():
 
                 if book_act["name"] == "Boka":
                     hour_min_split = book_act["start_time"].split(":")
-                    epoch = datetime.datetime.combine(date_next_week,datetime.time(int(hour_min_split[0]),int(hour_min_split[1])).timestamp())
+                    epoch = datetime.datetime.combine(date_next_week,datetime.time(int(hour_min_split[0]),int(hour_min_split[1]))).timestamp()
                     epoch = int(epoch)
                     payload["ActivityBooking"]["book_start"] = str(epoch)
                     payload["ActivityBooking"]["book_length"] = "30"
