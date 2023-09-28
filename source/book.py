@@ -178,14 +178,25 @@ def book(
         print("---running as test, no booking will be made---")
         print("config loaded:")
         print_dict(config)
-        print("modifying activities")
-        activities["activities"] = [{
-                "name": name,
-                "time": time,
-                "day": day
-            }]
+
+        if (
+            name and
+            time and
+            day
+        ):
+            test_act = {
+                    "name": name,
+                    "time": time,
+                    "day": day
+                }
+        else:
+            raise ValueError(
+                "To run the test you must at least specify, name, time and day"
+            )
+
         if start_time:
-            activities[activities][0]["start_time"] = start_time
+            test_act["start_time"]: start_time
+        activities["activities"] = []
         print("Modified activities:")
         print_dict(activities)
         exit(0)
