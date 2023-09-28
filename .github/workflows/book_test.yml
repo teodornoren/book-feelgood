@@ -36,6 +36,7 @@ jobs:
           python3 source/book.py 
           --username ${{ secrets.FEELGOOD_USER }} 
           --password ${{ secrets.FEELGOOD_PW }} 
+          --activities t
           --test True 
           --name "${{ inputs.activity }}" 
           --time "${{ inputs.time }}" 
