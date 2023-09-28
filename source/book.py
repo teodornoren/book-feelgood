@@ -77,42 +77,18 @@ def initialize_parser() -> dict:
     )
 
     parser.add_argument(
-        "--day-offset",
+        "-do", --"day-offset",
         help="Add optional offset day in place of config",
         required=False
     )
 
     parser.add_argument(
-        "--start-time",
+        "-st", "--start-time",
         help="Optional start time for Boka activities",
         required=False
     )
 
     parsed = parser.parse_args()
-    """
-    input_vars = {
-        "username": parsed.username,
-        "password": parsed.password,
-        "test": parsed.test,
-        "activities": f"activities/{parsed.activities}.yml"
-    }
-
-    if parsed.time and parsed.name and parsed.day:
-        input_vars["time"] = parsed.time
-        input_vars["name"] = parsed.name
-        input_vars["day"] = parsed.day
-    elif not parsed.time and not parsed.name and not parsed.day:
-        pass
-    else:
-        raise parser.error(
-            "Need to specify input name, time and day"
-            )
-
-    input_censor = input_vars
-    if input_vars["test"]:
-        input_censor["password"] = "**********"
-        print_dict(input_censor)
-    """
 
     return vars(parsed)
 
