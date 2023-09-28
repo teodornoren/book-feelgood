@@ -241,8 +241,6 @@ def book(
                             f"  {act['Activity']['id']}\n"
                             f"  {act['Activity']['start']}\n"
                     )
-                    print("debug:")
-                    print_dict(act["Activity"])
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
