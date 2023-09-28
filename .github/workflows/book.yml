@@ -12,7 +12,11 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Run booking action t
-        run: python3 source/book.py -usr ${{ secrets.FEELGOOD_USER }} -pw ${{ secrets.FEELGOOD_PW }} -act "activities-t.yml"
-
-      - name: Run booking action a
-        run: python3 source/book.py -usr ${{ secrets.EXTRA_USER }} -pw ${{ secrets.EXTRA_PW }} -act "activities-a.yml"
+        run: >
+            python3 source/book.py 
+            --username ${{ secrets.FEELGOOD_USER }} 
+            --password ${{ secrets.FEELGOOD_PW }} 
+            --activities t
+#
+#      - name: Run booking action a
+#        run: python3 source/book.py -usr ${{ secrets.EXTRA_USER }} -pw ${{ secrets.EXTRA_PW }} -act "activities-a.yml"

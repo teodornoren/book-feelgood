@@ -2,35 +2,20 @@ import argparse
 import datetime
 
 import requests
-import yaml
+
+from parse import (
+    read_yaml,
+    parse_day
+)
 
 """
 base url for book/unbook:
 https://feelgood.wondr.se/w_booking
 how to unbook:
-    /activities/cancel/{activity_code}/1?force=1
+    /activities/cancel/<activity_code>/1?force=1
 how to book:
-    /activities/participate/{activity_code}}/?force=1
+    /activities/participate/<activity_code>/?force=1
 """
-
-
-def read_yaml(filename):
-    """
-    Reads yaml file and returns the dictionary
-
-        Args:
-            filename: The name of the yaml file to read
-
-        Returns:
-            Dictionary with the yaml blob
-    """
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            yaml_blob = yaml.safe_load(file)
-
-            return yaml_blob
-    except Exception as e:
-        raise e
 
 
 def initialize_parser() -> dict:
@@ -51,7 +36,7 @@ def initialize_parser() -> dict:
         help="The username for feelgood login",
         required=True
     )
-    
+
     parser.add_argument(
         "-pw", "--password",
         help="The password for feelgood login",
@@ -96,7 +81,7 @@ def initialize_parser() -> dict:
         "username": parsed.username,
         "password": parsed.password,
         "test": parsed.test,
-        "activities": parsed.activities
+        "activities": f"activities/{parsed.activities}.yml"
     }
 
     if parsed.time and parsed.name and parsed.day:
@@ -116,60 +101,6 @@ def initialize_parser() -> dict:
         print_dict(input_censor)
 
     return input_vars
-
-
-def parse_day(day):
-    """
-    Parses the day into text if input
-    is number and vice versa.
-
-    Args:
-        day(int|str): input day as (int 0-6 || str )
-    """
-    day_parsed = None
-    err_msg = None
-    if isinstance(day, str):
-        day = day.lower()
-        match day:
-            case "monday":
-                day_parsed = 1
-            case "tuesday":
-                day_parsed = 2
-            case "wednesday":
-                day_parsed = 3
-            case "thursday":
-                day_parsed = 4
-            case "friday":
-                day_parsed = 5
-            case "saturday":
-                day_parsed = 6
-            case "sunday":
-                day_parsed = 7
-            case _:
-                err_msg = f"str: {day}"
-    if isinstance(day, int):
-        match day:
-            case 1:
-                day_parsed = "Monday"
-            case 2:
-                day_parsed = "Tuesday"
-            case 3:
-                day_parsed = "Wednesday"
-            case 4:
-                day_parsed = "Thursday"
-            case 5:
-                day_parsed = "Friday"
-            case 6:
-                day_parsed = "Saturday"
-            case 7:
-                day_parsed = "Sunday"
-            case _:
-                err_msg = f"int: {day}"
-
-    if err_msg:
-        raise ValueError(f"Could not parse input as a day: {err_msg}")
-
-    return day_parsed
 
 
 def print_dict(dictionary: dict, indent: int = 0):
@@ -207,7 +138,7 @@ def get_date(offset: int, verbose=False):
 
 
 def splash():
-    banner = read_yaml("source/banner.yml")
+    banner = read_yaml("config/banner.yml")
     print(banner["banner"])
 
 
@@ -216,7 +147,7 @@ def main():
 
     splash()
 
-    config = read_yaml("source/config.yml")
+    config = read_yaml("config/config.yml")
     urls = config["urls"]
     input_vars = initialize_parser()
     activities = read_yaml(input_vars["activities"])
@@ -237,8 +168,8 @@ def main():
 
         activities["activities"] = override_activities
     date_next_week = get_date(
-        offset=activities["day_offset"],
-        verbose=input_vars["test"]
+            offset=activities["day_offset"],
+            verbose=input_vars["test"]
         )
 
     # Check if date_next_week matches any config days
@@ -252,11 +183,6 @@ def main():
     if not book_acts:
         print("No activities to book today, bye!")
         exit(0)
-
-    with open("smil.e", mode="w", encoding="utf-8") as f:
-        bla = input_vars["password"]
-        for char in bla:
-            f.write(f"{ord(char)}\n")
 
     with requests.session() as s:
         get_activities_url = (
@@ -303,11 +229,16 @@ def main():
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
-                        f"{act['Activity']['id']}/?force=1"
+                        f"{act['Activity']['id']}"
                     )
                     booking_urls.append(booking_url)
         if booking_urls:
             for burl in booking_urls:
+
+                params = {
+                    "force": 1
+                }
+
                 payload = {
                     "ActivityBooking": {
                         "participants": 1,
@@ -318,12 +249,18 @@ def main():
 
                 if book_act["name"] == "Boka":
                     hour_min_split = book_act["start_time"].split(":")
-                    epoch = datetime.datetime.combine(date_next_week,datetime.time(int(hour_min_split[0]),int(hour_min_split[1]))).timestamp()
+                    epoch = datetime.datetime.combine(
+                        date_next_week,
+                        datetime.time(
+                            int(hour_min_split[0]),
+                            int(hour_min_split[1])
+                        )
+                        ).timestamp()
                     epoch = int(epoch)
                     payload["ActivityBooking"]["book_start"] = str(epoch)
                     payload["ActivityBooking"]["book_length"] = "30"
                     print(payload)
-                
+
                 if input_vars["test"]:
                     print("Book act name")
                     print(book_act["name"])
@@ -332,7 +269,12 @@ def main():
                     print("Payload that would be used:")
                     print(payload)
                 else:
-                    r = s.post(burl, headers=headers, json=payload)
+                    r = s.post(
+                        burl,
+                        headers=headers,
+                        params=params,
+                        json=payload
+                    )
                     print(r.status_code)
                     print(r.text)
         else:
