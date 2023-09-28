@@ -12,10 +12,10 @@ on:
       day:
         type: string
         description: day of the activity
-      day_offset:
+      day-offset:
           type: string
           description: change offset day
-      start_time:
+      start-time:
           type: string
           description: use for Boka activity
 
