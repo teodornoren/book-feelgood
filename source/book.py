@@ -150,8 +150,6 @@ def book(
 
     if test:
         print("---running as test, no booking will be made---")
-        print("config loaded:")
-        print(settings, urls, headers)
 
     if activities:
         activities = read_yaml(f"activities/{activities}.yml")
