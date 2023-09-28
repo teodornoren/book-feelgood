@@ -51,11 +51,18 @@ def initialize_parser() -> dict:
         help="The username for feelgood login",
         required=True
     )
+    
     parser.add_argument(
         "-pw", "--password",
         help="The password for feelgood login",
         required=True
         )
+
+    parser.add_argument(
+        "-act", "--activities",
+        help="Activities.yml file to use",
+        requiered=False
+    )
 
     parser.add_argument(
         "-tst", "--test",
@@ -210,8 +217,8 @@ def main():
 
     config = read_yaml("source/config.yml")
     urls = config["urls"]
-    activities = read_yaml("activities.yml")
     input_vars = initialize_parser()
+    activities = read_yaml(input_vars["activities"])
     headers = config["headers"]
 
     if (input_vars["test"]):
