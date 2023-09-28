@@ -1,4 +1,4 @@
-name: Book activity - test run
+name: Book activity - manual
 
 on:
   workflow_dispatch:
@@ -36,7 +36,6 @@ jobs:
           python3 source/book.py 
           --username ${{ secrets.FEELGOOD_USER }} 
           --password ${{ secrets.FEELGOOD_PW }} 
-          --test True 
           --name "${{ inputs.activity }}" 
           --time "${{ inputs.time }}" 
           --day "${{ inputs.day }}"

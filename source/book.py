@@ -132,6 +132,15 @@ def splash():
     print(banner["banner"])
 
 
+def load_config():
+    config = read_yaml("config/config.yml")
+    return (
+        config["settings"],
+        config["urls"],
+        config["headers"]
+    )
+
+
 def book(
         username: str,
         password: str,
@@ -144,18 +153,17 @@ def book(
         day_offset: str
 ):
     splash()
+    settings, urls, headers = load_config()
 
-    config = read_yaml("config/config.yml")
-    urls = config["urls"]
-    headers = config["headers"]
-
-    activities = read_yaml(f"activities/{activities}.yml")
     if test:
         print("---running as test, no booking will be made---")
         print("config loaded:")
-        print_dict(config)
-        print("DAY OFF AND ST")
-        print(day_offset, start_time)
+        print_dict(settings, urls, headers)
+
+    if activities:
+        activities = read_yaml(f"activities/{activities}.yml")
+        print(f"Running using activities in activities/{activities}.yml")
+    else:
         if (
             name and
             time and
@@ -174,14 +182,11 @@ def book(
                 "To run the test you must at least specify, name, time and day"
             )
 
-        print("Modified activities:")
+        print("Manual activity:")
         print_dict(activities)
-        exit(0)
-    else:
-        print(f"Running using activities in activities/{activities}.yml")
 
     if not day_offset:
-        day_offset = config["settings"]["day_offset"]
+        day_offset = settings["day_offset"]
 
     date_next_week = get_date(
             offset=activities["day_offset"],
@@ -211,7 +216,7 @@ def book(
             "today": 0,
             "mine": 0,
             "only_try_it": 0,
-            "facility": config["settings"]['facility']
+            "facility": settings['facility']
         }
 
         payload = {
