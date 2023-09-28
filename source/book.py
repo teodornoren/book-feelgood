@@ -167,7 +167,7 @@ def book(
                     "day": day
                 }
             if start_time:
-                test_act["start_time"]: start_time
+                test_act["start_time"] = start_time
             activities["activities"] = test_act
         else:
             raise ValueError(
