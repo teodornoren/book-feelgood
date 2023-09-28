@@ -40,5 +40,5 @@ jobs:
           --name "${{ inputs.activity }}" 
           --time "${{ inputs.time }}" 
           --day "${{ inputs.day }}"
-          --day_offset "${{ inputs.day-offset }}"
-          --start_time "${{ inputs.start-time }}"
+          --day-offset "${{ inputs.day-offset }}"
+          --start-time "${{ inputs.start-time }}"
