@@ -176,6 +176,7 @@ def book(
                 }
             if start_time:
                 test_act["start_time"] = start_time
+            activities = {}
             activities["activities"] = test_act
         else:
             raise ValueError(
