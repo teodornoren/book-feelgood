@@ -189,15 +189,15 @@ def book(
     if not day_offset:
         day_offset = settings["day_offset"]
 
-    date_next_week = get_date(
-            offset=activities["day_offset"],
+    future_date = get_date(
+            offset=settings["day_offset"],
             verbose=test
         )
 
     # Check if date_next_week matches any config days
     book_acts = []
     for act in activities["activities"]:
-        if date_next_week.isoweekday() == parse_day(act["day"]):
+        if future_date.isoweekday() == parse_day(act["day"]):
             print("Activity day matches, will book for:")
             print_dict(act)
             book_acts.append(act)
@@ -212,8 +212,8 @@ def book(
         )
 
         params = {
-            "from": date_next_week,
-            "to": date_next_week,
+            "from": future_date,
+            "to": future_date,
             "today": 0,
             "mine": 0,
             "only_try_it": 0,
@@ -248,6 +248,8 @@ def book(
                             f"  {act['Activity']['id']}\n"
                             f"  {act['Activity']['start']}\n"
                     )
+                    print("debug:")
+                    print_dict(act["Activity"])
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
@@ -272,7 +274,7 @@ def book(
                 if book_act["name"] == "Boka":
                     hour_min_split = book_act["start_time"].split(":")
                     epoch = datetime.datetime.combine(
-                        date_next_week,
+                        future_date,
                         datetime.time(
                             int(hour_min_split[0]),
                             int(hour_min_split[1])
