@@ -14,4 +14,4 @@ activities:
     time: "<time>"
     day: <week_day>
 ```
-See the [activities] directory for an example.
+See the [activities](activities) directory for examples.

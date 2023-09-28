@@ -21,13 +21,6 @@ how to book:
 def initialize_parser() -> dict:
     """
     Needed input arguments for this program
-
-    Returns:
-        Dictionary containing parmeters
-            username(string),
-            password(string),
-            test(bool),
-            time(str)
     """
     parser = argparse.ArgumentParser()
 

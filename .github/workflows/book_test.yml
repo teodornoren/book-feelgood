@@ -19,11 +19,8 @@ on:
           type: string
           description: use for Boka activity
 
-  repository_dispatch:
-    types: [ book_test ]
-
 jobs:
-  book:
+  book-test:
     runs-on: [self-hosted, KAV]
     steps:
       - uses: actions/checkout@v3

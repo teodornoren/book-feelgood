@@ -19,11 +19,8 @@ on:
           type: string
           description: use for Boka activity
 
-  repository_dispatch:
-    types: [ book_test ]
-
 jobs:
-  book:
+  book-manual:
     runs-on: [self-hosted, KAV]
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +28,7 @@ jobs:
       - name: install requirements
         run: python3 -m pip install -r source/requirements.txt
         
-      - name: Run booking action test
+      - name: Run booking action manual
         run: >
           python3 source/book.py 
           --username ${{ secrets.FEELGOOD_USER }} 
