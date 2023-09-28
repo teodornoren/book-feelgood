@@ -95,7 +95,8 @@ def initialize_parser() -> dict:
     input_vars = {
         "username": parsed.username,
         "password": parsed.password,
-        "test": parsed.test
+        "test": parsed.test,
+        "activities": parsed.activities
     }
 
     if parsed.time and parsed.name and parsed.day:
