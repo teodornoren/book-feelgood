@@ -77,7 +77,7 @@ def initialize_parser() -> dict:
     )
 
     parser.add_argument(
-        "-do", --"day-offset",
+        "-do", "--day-offset",
         help="Add optional offset day in place of config",
         required=False
     )
