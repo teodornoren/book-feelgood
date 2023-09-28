@@ -189,14 +189,14 @@ def book(
                     "time": time,
                     "day": day
                 }
+            if start_time:
+                test_act["start_time"]: start_time
+            activities["activities"] = test_act
         else:
             raise ValueError(
                 "To run the test you must at least specify, name, time and day"
             )
 
-        if start_time:
-            test_act["start_time"]: start_time
-        activities["activities"] = []
         print("Modified activities:")
         print_dict(activities)
         exit(0)
