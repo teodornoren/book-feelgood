@@ -190,7 +190,7 @@ def book(
         day_offset = settings["day_offset"]
 
     future_date = get_date(
-            offset=settings["day_offset"],
+            offset=day_offset,
             verbose=test
         )
 
