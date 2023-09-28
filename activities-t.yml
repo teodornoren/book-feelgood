@@ -2,13 +2,10 @@
 day_offset: 6
 facility: 60a7ac3f-b774-4228-a9a3-056c0a10010d
 activities:
-  - name: Badminton
-    time: "17:05"
-    day: Monday
   - name: Boka
-    time: "08:00"
-    day: Tuesday
-    start_time: 10
+    time: "13:00"
+    day: Monday
+    start_time: "15:00"
   - name: Badminton
     time: "15:00"
     day: Wednesday
