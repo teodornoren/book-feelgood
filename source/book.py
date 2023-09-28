@@ -61,7 +61,7 @@ def initialize_parser() -> dict:
     parser.add_argument(
         "-act", "--activities",
         help="Activities.yml file to use",
-        requiered=False
+        required=False
     )
 
     parser.add_argument(
