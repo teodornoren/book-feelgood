@@ -180,7 +180,7 @@ def book(
             activities["activities"] = test_act
         else:
             raise ValueError(
-                "To run the test you must at least specify, name, time and day"
+                "To run manually you must at least specify: name, time and day"
             )
 
         print("Manual activity:")
