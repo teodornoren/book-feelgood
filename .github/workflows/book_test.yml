@@ -12,6 +12,13 @@ on:
       day:
         type: string
         description: day of the activity
+      day_offset:
+          type: string
+          description: change offset day
+      start_time:
+          type: string
+          description: use for Boka activity
+
   repository_dispatch:
     types: [ book_test ]
 
@@ -33,3 +40,5 @@ jobs:
           --name "${{ inputs.activity }}" 
           --time "${{ inputs.time }}" 
           --day "${{ inputs.day }}"
+          --day_offset "${{ inputs.day-offset }}"
+          --start_time "${{ inputs.start-time }}"

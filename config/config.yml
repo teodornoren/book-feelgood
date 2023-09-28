@@ -1,4 +1,7 @@
 ---
+settings:
+  day_offset: 6
+  facility: 60a7ac3f-b774-4228-a9a3-056c0a10010d
 urls:
   base_url: https://feelgood.wondr.se/
   home: users/start

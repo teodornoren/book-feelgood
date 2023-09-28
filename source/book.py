@@ -76,7 +76,20 @@ def initialize_parser() -> dict:
         required=False
     )
 
+    parser.add_argument(
+        "--day-offset",
+        help="Add optional offset day in place of config",
+        required=False
+    )
+
+    parser.add_argument(
+        "--start-time",
+        help="Optional start time for Boka activities",
+        required=False
+    )
+
     parsed = parser.parse_args()
+    """
     input_vars = {
         "username": parsed.username,
         "password": parsed.password,
@@ -99,8 +112,9 @@ def initialize_parser() -> dict:
     if input_vars["test"]:
         input_censor["password"] = "**********"
         print_dict(input_censor)
+    """
 
-    return input_vars
+    return vars(parsed)
 
 
 def print_dict(dictionary: dict, indent: int = 0):
@@ -142,34 +156,48 @@ def splash():
     print(banner["banner"])
 
 
-def main():
-    """get parser args"""
-
+def book(
+        username: str,
+        password: str,
+        activities: str,
+        test: bool,
+        time: str,
+        start_time: str,
+        name: str,
+        day: str,
+        day_offset: str
+):
     splash()
 
     config = read_yaml("config/config.yml")
     urls = config["urls"]
-    input_vars = initialize_parser()
-    activities = read_yaml(input_vars["activities"])
     headers = config["headers"]
 
-    if (input_vars["test"]):
+    activities = read_yaml(f"activities/{activities}.yml")
+    if test:
         print("---running as test, no booking will be made---")
         print("config loaded:")
         print_dict(config)
-
-    if ("time" in input_vars):
-        print("Overriding activities...")
-        override_activities = [{
-                "name": input_vars["name"],
-                "time": input_vars["time"],
-                "day": input_vars["day"]
+        print("modifying activities")
+        activities["activities"] = [{
+                "name": name,
+                "time": time,
+                "day": day
             }]
+        if start_time:
+            activities[activities][0]["start_time"] = start_time
+        print("Modified activities:")
+        print_dict(activities)
+        exit(0)
+    else:
+        print(f"Running using activities in activities/{activities}.yml")
 
-        activities["activities"] = override_activities
+    if not day_offset:
+        day_offset = config["settings"]["day_offset"]
+
     date_next_week = get_date(
             offset=activities["day_offset"],
-            verbose=input_vars["test"]
+            verbose=test
         )
 
     # Check if date_next_week matches any config days
@@ -195,13 +223,13 @@ def main():
             "today": 0,
             "mine": 0,
             "only_try_it": 0,
-            "facility": activities['facility']
+            "facility": config["settings"]['facility']
         }
 
         payload = {
             "User": {
-                "email": input_vars["username"],
-                "password": input_vars["password"]
+                "email": username,
+                "password": password
                 }
         }
 
@@ -261,7 +289,7 @@ def main():
                     payload["ActivityBooking"]["book_length"] = "30"
                     print(payload)
 
-                if input_vars["test"]:
+                if test:
                     print("Book act name")
                     print(book_act["name"])
                     print("Booking url that would be used:")
@@ -282,4 +310,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    book(**initialize_parser())
