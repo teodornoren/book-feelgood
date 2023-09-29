@@ -37,7 +37,7 @@ def initialize_parser() -> dict:
         )
 
     parser.add_argument(
-        "-act", "--activities",
+        "-act", "--activities_file",
         help="Activities.yml file to use",
         required=False
     )
@@ -137,7 +137,7 @@ def load_config():
 def book(
         username: str,
         password: str,
-        activities: str,
+        activities_file: str,
         test: bool,
         time: str,
         start_time: str,
@@ -150,10 +150,10 @@ def book(
 
     if test:
         print("---running as test, no booking will be made---")
-
-    if activities:
-        activities = read_yaml(f"activities/{activities}.yml")
-        print(f"Running using activities in activities/{activities}.yml")
+    activities = None
+    if activities_file:
+        activities = read_yaml(f"activities/{activities_file}.yml")
+        print(f"Running using activities in activities/{activities_file}.yml")
     else:
         if (
             name and
