@@ -1,13 +1,25 @@
 import yaml
 
 
-def parse_day(day):
+def parse_day(day: int | str) -> int | str:
     """
-    Parses the day into text if input
-    is number and vice versa.
+    Converts a day between its numerical and textual representations.
+
+    This function accepts either an integer (1-7) or a string representing a
+    day of the week. If an integer is provided, it will be converted to the
+    corresponding day name (e.g., 1 -> "Monday"). If a string is provided, it
+    will be converted to the corresponding integer value (e.g., "Tuesday" -> 2)
 
     Args:
-        day(int|str): input day as (int 0-6 || str )
+        day (int | str): The input day to be parsed. Can be an integer (1-7)
+        or a day name string.
+
+    Returns:
+        int | str: The parsed day, either as an integer (1-7)
+        or a day name string.
+
+    Raises:
+        ValueError: If the input cannot be parsed as a valid day.
     """
     day_parsed = None
     err_msg = None
@@ -55,7 +67,7 @@ def parse_day(day):
     return day_parsed
 
 
-def read_yaml(filename):
+def read_yaml(filename: str) -> dict:
     """
     Reads yaml file and returns the dictionary
 

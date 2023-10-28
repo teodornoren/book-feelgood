@@ -1,6 +1,6 @@
 import argparse
 import datetime
-
+from loguru import logger
 import requests
 
 from parse import (
@@ -149,7 +149,7 @@ def book(
     settings, urls, headers = load_config()
 
     if test:
-        print("---running as test, no booking will be made---")
+        logger.info("---running as test, no booking will be made---")
     activities = None
     if activities_file:
         activities = read_yaml(f"activities/{activities_file}.yml")
