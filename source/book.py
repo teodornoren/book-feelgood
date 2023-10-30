@@ -191,7 +191,7 @@ def book(
     book_acts = []
     for act in activities["activities"]:
         if future_date.isoweekday() == parse_day(act["day"]):
-            logger.info("Activity day matches, will book for:")
+            logger.info("Activity day matches, will look for:")
             print_dict(act)
             book_acts.append(act)
 
@@ -232,15 +232,10 @@ def book(
                         book_act["name"] in act["ActivityType"]["name"] and
                         book_act["time"] in act["Activity"]["start"]
                 ):
-                    logger.info(
-                            "Found activity matching:\n"
-                            f"  Name: {book_act['name']}\n"
-                            f"  Time: {book_act['time']}\n"
-                            "Activity details:\n"
-                            f"  {act['ActivityType']['name']}\n"
-                            f"  {act['Activity']['id']}\n"
-                            f"  {act['Activity']['start']}\n"
-                    )
+                    logger.info("Found activity matching:")
+                    logger.info(f"  {act['ActivityType']['name']}")
+                    logger.info(f"  {act['Activity']['start']}")
+
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
@@ -260,6 +255,7 @@ def book(
                     "send_confirmation": 1
                 }
                 if book_act["name"] == "Boka":
+                    logger.info(f"  Start time: {book_act["start_time"]}")
                     hour_min_split = book_act["start_time"].split(":")
                     epoch = datetime.datetime.combine(
                         future_date,
@@ -291,7 +287,8 @@ def book(
                         r.json()["result"] == "ok"
                     ):
                         logger.success(
-                            f"Successfully booked {book_act['name']}"
+                            "Successfully booked "
+                            f"{act['ActivityType']['name']}"
                         )
                     else:
                         logger.error(
@@ -300,6 +297,7 @@ def book(
                         )
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
+                        exit(666)
         else:
             logger.info("No matching activity was found.")
 
