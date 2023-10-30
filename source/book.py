@@ -122,7 +122,7 @@ def get_date(offset: int, verbose=False):
 
 def splash():
     banner = read_yaml("config/banner.yml")
-    logger.info(banner["banner"])
+    logger.critical(banner["banner"])
 
 
 def load_config():

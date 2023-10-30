@@ -5,9 +5,13 @@ on:
   repository_dispatch:
     types: [ book ]
 
+env: 
+  LOGURU_LEVEL: SUCCESS
+
 jobs:
   book:
     runs-on: [self-hosted, KAV]
+
     steps:
       - uses: actions/checkout@v3
 
