@@ -107,15 +107,13 @@ def get_date(offset: int, verbose=False):
     new_date = dt - datetime.timedelta(days=-offset)
 
     if verbose:
-        logger.debug(
-            "Verbose mode for get_date:\n"
-            "Today:\n"
-            f"  Datetime is: {dt}\n"
-            f"  Weekday is: {parse_day(dt.isoweekday())}\n"
-            "Offset day:\n"
-            f"  Datetime is: {new_date}\n"
-            f"  Weekday is: {parse_day(new_date.isoweekday())}\n"
-        )
+        logger.debug("Verbose mode for get_date:")
+        logger.debug("Today:")
+        logger.debug(f"  Datetime is: {dt}")
+        logger.debug(f"  Weekday is: {parse_day(dt.isoweekday())}")
+        logger.debug("Offset day:")
+        logger.debug(f"  Datetime is: {new_date}")
+        logger.debug(f"  Weekday is: {parse_day(new_date.isoweekday())}")
 
     return new_date
 
