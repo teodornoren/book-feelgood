@@ -86,18 +86,18 @@ def initialize_parser() -> dict:
     return vars(parsed)
 
 
-def print_dict(dictionary: dict, indent: int = 0):
+def log_dict(dictionary: dict, indent: int = 0):
     offset = ""
     for _ in range(0, indent):
         offset = f"{offset}  "
     for key, item in dictionary.items():
         if isinstance(item, dict):
             logger.info(f"{offset}{key}:")
-            print_dict(item, indent=indent+1)
+            log_dict(item, indent=indent+1)
         elif isinstance(item, list):
             logger.info(f"{offset}{key}:")
             for i in item:
-                print_dict(i, indent=indent+1)
+                log_dict(i, indent=indent+1)
         else:
             logger.info(f"{offset}{key}: {item}")
 
@@ -177,7 +177,7 @@ def book(
             )
 
         logger.info("Manual activity:")
-        print_dict(activities)
+        log_dict(activities)
 
     if not day_offset:
         day_offset = settings["day_offset"]
@@ -192,7 +192,7 @@ def book(
     for act in activities["activities"]:
         if future_date.isoweekday() == parse_day(act["day"]):
             logger.info("Activity day matches, will look for:")
-            print_dict(act)
+            log_dict(act)
             book_acts.append(act)
 
     if not book_acts:
