@@ -196,7 +196,7 @@ def book(
             book_acts.append(act)
 
     if not book_acts:
-        logger.info("No activities to book today, bye!")
+        logger.success("No activities to book today, bye!")
         exit(0)
 
     with requests.session() as s:
@@ -299,7 +299,7 @@ def book(
                         logger.error(f"{r.text=}")
                         exit(666)
         else:
-            logger.info("No matching activity was found.")
+            logger.warning("No matching activity was found.")
 
 
 if __name__ == "__main__":
