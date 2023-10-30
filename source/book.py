@@ -107,7 +107,7 @@ def get_date(offset: int, verbose=False):
     new_date = dt - datetime.timedelta(days=-offset)
 
     if verbose:
-        print(
+        logger.debug(
             "Verbose mode for get_date:\n"
             "Today:\n"
             f"  Datetime is: {dt}\n"
@@ -153,7 +153,9 @@ def book(
     activities = None
     if activities_file:
         activities = read_yaml(f"activities/{activities_file}.yml")
-        print(f"Running using activities in activities/{activities_file}.yml")
+        logger.info(
+            f"Running using activities from activities/{activities_file}.yml"
+        )
     else:
         if (
             name and
@@ -174,7 +176,7 @@ def book(
                 "To run manually you must at least specify: name, time and day"
             )
 
-        print("Manual activity:")
+        logger.info("Manual activity:")
         print_dict(activities)
 
     if not day_offset:
@@ -189,12 +191,12 @@ def book(
     book_acts = []
     for act in activities["activities"]:
         if future_date.isoweekday() == parse_day(act["day"]):
-            print("Activity day matches, will book for:")
+            logger.info("Activity day matches, will book for:")
             print_dict(act)
             book_acts.append(act)
 
     if not book_acts:
-        print("No activities to book today, bye!")
+        logger.info("No activities to book today, bye!")
         exit(0)
 
     with requests.session() as s:
@@ -230,7 +232,7 @@ def book(
                         book_act["name"] in act["ActivityType"]["name"] and
                         book_act["time"] in act["Activity"]["start"]
                 ):
-                    print(
+                    logger.info(
                             "Found activity matching:\n"
                             f"  Name: {book_act['name']}\n"
                             f"  Time: {book_act['time']}\n"
@@ -247,11 +249,9 @@ def book(
                     booking_urls.append(booking_url)
         if booking_urls:
             for burl in booking_urls:
-
                 params = {
                     "force": 1
                 }
-
                 payload = {
                     "ActivityBooking": {
                         "participants": 1,
@@ -259,7 +259,6 @@ def book(
                     },
                     "send_confirmation": 1
                 }
-
                 if book_act["name"] == "Boka":
                     hour_min_split = book_act["start_time"].split(":")
                     epoch = datetime.datetime.combine(
@@ -272,15 +271,14 @@ def book(
                     epoch = int(epoch)
                     payload["ActivityBooking"]["book_start"] = str(epoch)
                     payload["ActivityBooking"]["book_length"] = "30"
-                    print(payload)
 
                 if test:
-                    print("Book act name")
-                    print(book_act["name"])
-                    print("Booking url that would be used:")
-                    print(burl)
-                    print("Payload that would be used:")
-                    print(payload)
+                    logger.debug("Book act name")
+                    logger.debug(book_act["name"])
+                    logger.debug("Booking url that would be used:")
+                    logger.debug(burl)
+                    logger.debug("Payload that would be used:")
+                    logger.debug(payload)
                 else:
                     r = s.post(
                         burl,
@@ -288,10 +286,22 @@ def book(
                         params=params,
                         json=payload
                     )
-                    print(r.status_code)
-                    print(r.text)
+                    if (
+                        r.status_code == 200 and
+                        r.json["result"] == "ok"
+                    ):
+                        logger.success(
+                            f"Successfully booked {book_act["name"]}"
+                        )
+                    else:
+                        logger.error(
+                            "Something went wrong when booking"
+                            f" {book_act["name"]}"
+                        )
+                        logger.error(f"{r.status_code=}")
+                        logger.error(f"{r.text=}")
         else:
-            print("No matching activity was found.")
+            logger.info("No matching activity was found.")
 
 
 if __name__ == "__main__":

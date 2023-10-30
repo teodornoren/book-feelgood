@@ -7,3 +7,7 @@ activities:
   - name: Badminton
     time: "15:00"
     day: Wednesday
+  - name: Boka
+    time: "09:00"
+    day: Monday
+    start_time: "15:00"
