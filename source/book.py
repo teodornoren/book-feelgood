@@ -291,12 +291,12 @@ def book(
                         r.json["result"] == "ok"
                     ):
                         logger.success(
-                            f"Successfully booked {book_act["name"]}"
+                            f"Successfully booked {book_act['name']}"
                         )
                     else:
                         logger.error(
                             "Something went wrong when booking"
-                            f" {book_act["name"]}"
+                            f" {book_act['name']}"
                         )
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
