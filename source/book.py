@@ -92,14 +92,14 @@ def print_dict(dictionary: dict, indent: int = 0):
         offset = f"{offset}  "
     for key, item in dictionary.items():
         if isinstance(item, dict):
-            print(f"{offset}{key}:")
+            logger.info(f"{offset}{key}:")
             print_dict(item, indent=indent+1)
         elif isinstance(item, list):
-            print(f"{offset}{key}:")
+            logger.info(f"{offset}{key}:")
             for i in item:
                 print_dict(i, indent=indent+1)
         else:
-            print(f"{offset}{key}: {item}")
+            logger.info(f"{offset}{key}: {item}")
 
 
 def get_date(offset: int, verbose=False):
@@ -288,7 +288,7 @@ def book(
                     )
                     if (
                         r.status_code == 200 and
-                        r.json["result"] == "ok"
+                        r.json()["result"] == "ok"
                     ):
                         logger.success(
                             f"Successfully booked {book_act['name']}"
