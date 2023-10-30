@@ -255,7 +255,7 @@ def book(
                     "send_confirmation": 1
                 }
                 if book_act["name"] == "Boka":
-                    logger.info(f"  Start time: {book_act["start_time"]}")
+                    logger.info(f"  Start time: {book_act['start_time']}")
                     hour_min_split = book_act["start_time"].split(":")
                     epoch = datetime.datetime.combine(
                         future_date,
