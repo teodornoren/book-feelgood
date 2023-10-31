@@ -1,17 +1,15 @@
-
-import datetime
 from loguru import logger
+import datetime
 import requests
-
-from parse import (
-    read_yaml,
-    parse_day,
-    log_dict,
-    get_date,
-    initialize_parser,
-    load_config,
-    splash
-)
+from book_feelgood.parse import (
+        read_yaml,
+        parse_day,
+        log_dict,
+        get_date,
+        load_config,
+        splash,
+        initialize_parser
+    )
 
 
 class feelgood_activity:
