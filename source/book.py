@@ -332,7 +332,7 @@ def book(
                     ):
                         logger.success(
                             "Successfully booked "
-                            f"{activity_toname}"
+                            f"{activity_to_book().name}"
                         )
                     else:
                         logger.error(
