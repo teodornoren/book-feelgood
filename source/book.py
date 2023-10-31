@@ -296,11 +296,11 @@ def book(
                     },
                     "send_confirmation": 1
                 }
-                if "Boka" in str(activity_to_book.name):
+                if "Boka" in activity_to_book().name:
                     logger.info(
-                        f"  Start time: {activity_to_book.start_time}"
+                        f"  Start time: {activity_to_book().start_time}"
                     )
-                    hour_min_split = activity_to_book.start_time.split(":")
+                    hour_min_split = activity_to_book().start_time.split(":")
                     epoch = datetime.datetime.combine(
                         future_date,
                         datetime.time(
@@ -314,14 +314,14 @@ def book(
 
                 if test:
                     logger.debug("Book act name")
-                    logger.debug(activity_to_book.name)
+                    logger.debug(activity_to_book().name)
                     logger.debug("Booking url that would be used:")
-                    logger.debug(activity_to_book.url)
+                    logger.debug(activity_to_book().url)
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
                 else:
                     r = s.post(
-                        activity_to_book.url,
+                        activity_to_book().url,
                         headers=headers,
                         params=params,
                         json=payload
@@ -332,12 +332,12 @@ def book(
                     ):
                         logger.success(
                             "Successfully booked "
-                            f"{activity_to_book.name}"
+                            f"{activity_toname}"
                         )
                     else:
                         logger.error(
                             "Something went wrong when booking"
-                            f" {activity_to_book.name}"
+                            f" {activity_to_book().name}"
                         )
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
