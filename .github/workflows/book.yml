@@ -25,9 +25,9 @@ jobs:
           --password ${{ secrets.FEELGOOD_PW }} 
           --activities_file t
 
-      # - name: Run booking action a
-      #   run: >
-      #     python3 source/book.py 
-      #     --username ${{ secrets.EXTRA_USER }} 
-      #     --password ${{ secrets.EXTRA_PW }} 
-      #     --activities_file a
+      - name: Run booking action a
+        run: >
+          python3 source/book.py 
+          --username ${{ secrets.EXTRA_USER }} 
+          --password ${{ secrets.EXTRA_PW }} 
+          --activities_file a

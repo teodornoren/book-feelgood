@@ -78,4 +78,14 @@ activities:
 ```
 See the [activities](activities) directory for examples.
 
+#### reminder to self:
+
+##### Booking and unbooking 
+base url for book/unbook:\
+https://feelgood.wondr.se/w_booking\
+how to unbook:\
+    /activities/cancel/<activity_code>/1?force=1\
+how to book:\
+    /activities/participate/<activity_code>/?force=1\
+
 

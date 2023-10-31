@@ -13,15 +13,6 @@ from parse import (
     splash
 )
 
-"""
-base url for book/unbook:
-https://feelgood.wondr.se/w_booking
-how to unbook:
-    /activities/cancel/<activity_code>/1?force=1
-how to book:
-    /activities/participate/<activity_code>/?force=1
-"""
-
 
 class feelgood_activity:
     def __init__(
@@ -109,14 +100,14 @@ def book(
     future_date = get_date(offset=int(day_offset))
 
     # Check if date_next_week matches any config days
-    book_acts = []
-    for act in activities["activities"]:
-        if future_date.isoweekday() == parse_day(act["day"]):
+    yml_acts = []
+    for yml_act in activities["activities"]:
+        if future_date.isoweekday() == parse_day(yml_act["day"]):
             logger.info("Activity day matches, will look for:")
-            log_dict(act)
-            book_acts.append(act)
+            log_dict(yml_act)
+            yml_acts.append(yml_act)
 
-    if not book_acts:
+    if not yml_acts:
         logger.success("No activities to book today, bye!")
         exit(0)
 
@@ -147,25 +138,25 @@ def book(
 
         activities_to_book = []
 
-        for act in feelgood_activities["activities"]:
-            for book_act in book_acts:
+        for f_act in feelgood_activities["activities"]:
+            for yml_act in yml_acts:
                 if (
-                        book_act["name"] in act["ActivityType"]["name"] and
-                        book_act["time"] in act["Activity"]["start"]
+                        yml_act["name"] in f_act["ActivityType"]["name"] and
+                        yml_act["time"] in f_act["Activity"]["start"]
                 ):
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
-                        f"{act['Activity']['id']}"
+                        f"{f_act['Activity']['id']}"
                     )
 
                     fa = feelgood_activity(
                         url=booking_url,
-                        name=act["ActivityType"]["name"],
-                        start=act["Activity"]["start"],
+                        name=f_act["ActivityType"]["name"],
+                        start=f_act["Activity"]["start"],
                     )
-                    if "start_time" in book_act:
-                        fa.start_time = (book_act["start_time"])
+                    if "start_time" in yml_act:
+                        fa.start_time = (yml_act["start_time"])
                     logger.info("Found activity matching:")
                     logger.info(f"  {fa.name}")
                     logger.info(f"  {fa.start}")
@@ -219,13 +210,15 @@ def book(
                         r.json()["result"] == "ok"
                     ):
                         logger.success(
-                            "Successfully booked "
+                            "Successfully booked - "
+                            f"{activity_to_book.start}: "
                             f"{activity_to_book.name}"
                         )
                     else:
                         logger.error(
-                            "Something went wrong when booking"
-                            f" {activity_to_book.name}"
+                            "Something went wrong when booking - "
+                            f"{activity_to_book.start}: "
+                            f"{activity_to_book.name}"
                         )
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
