@@ -155,7 +155,7 @@ class feelgood_activity:
         return self._start
 
     @property
-    def name(self) -> str:
+    def name(self):
         return self._name
 
     @property
