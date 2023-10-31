@@ -135,9 +135,9 @@ def load_config():
 class feelgood_activity:
     def __init__(
             self,
-            url,
-            name,
-            start,
+            url: str,
+            name: str,
+            start: str,
             start_time=0
 
     ) -> None:
@@ -155,7 +155,7 @@ class feelgood_activity:
         return self._start
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
@@ -296,7 +296,7 @@ def book(
                     },
                     "send_confirmation": 1
                 }
-                if "Boka" in activity_to_book.name:
+                if "Boka" in str(activity_to_book.name):
                     logger.info(
                         f"  Start time: {activity_to_book.start_time}"
                     )
