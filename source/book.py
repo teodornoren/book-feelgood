@@ -132,7 +132,7 @@ def load_config():
     )
 
 
-class feelgood_activity():
+class feelgood_activity:
     def __init__(
             self,
             url,
@@ -141,13 +141,30 @@ class feelgood_activity():
             start_time=0
 
     ) -> None:
-        self.url = url
-        self.name = name
-        self.start = start
-        self.start_time = start_time
+        self._url = url
+        self._name = name
+        self._start = start
+        self._start_time = start_time
 
-    def set_start_time(self, start_time):
-        self.start_time = start_time
+    @property
+    def url(self):
+        return self._url
+
+    @property
+    def start(self):
+        return self._start
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def start_time(self):
+        return self._start_time
+
+    @start_time.setter
+    def start_time(self, start_time):
+        self._start_time = start_time
 
 
 def book(
@@ -260,7 +277,7 @@ def book(
                         start=act["Activity"]["start"],
                     )
                     if "start_time" in book_act:
-                        fa.set_start_time(book_act["start_time"])
+                        fa.start_time = (book_act["start_time"])
                     logger.info("Found activity matching:")
                     logger.info(f"  {fa.name}")
                     logger.info(f"  {fa.start}")
