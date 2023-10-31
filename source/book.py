@@ -209,17 +209,15 @@ def book(
                         r.status_code == 200 and
                         r.json()["result"] == "ok"
                     ):
-                        logger.success(
-                            "Successfully booked - "
-                            f"{activity_to_book.start}: "
-                            f"{activity_to_book.name}"
-                        )
+                        logger.success("Successfully booked:")
+                        logger.success(f"  {activity_to_book.name}")
+                        logger.success(f"  {activity_to_book.start}")
+                        logger.success(f"  {activity_to_book.start_time}")
                     else:
-                        logger.error(
-                            "Something went wrong when booking - "
-                            f"{activity_to_book.start}: "
-                            f"{activity_to_book.name}"
-                        )
+                        logger.error("Something went wrong:")
+                        logger.error(f"  {activity_to_book.name}")
+                        logger.error(f"  {activity_to_book.start}")
+                        logger.error(f"  {activity_to_book.start_time}")
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
                         exit(666)
