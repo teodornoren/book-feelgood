@@ -132,6 +132,24 @@ def load_config():
     )
 
 
+class feelgood_activity():
+    def __init__(
+            self,
+            url,
+            name,
+            start,
+            start_time=0
+
+    ) -> None:
+        self.url = url
+        self.name = name
+        self.start = start
+        self.start_time = start_time
+
+    def set_start_time(self, start_time):
+        self.start_time = start_time
+
+
 def book(
         username: str,
         password: str,
@@ -218,30 +236,39 @@ def book(
                 }
         }
 
-        booking_urls = []
         s.post(f"{urls['base_url']}", json=payload)
-
         r = s.get(get_activities_url, params=params, headers=headers)
+        feelgood_activities = r.json()
 
-        activity_dict = r.json()
-        for act in activity_dict["activities"]:
+        activities_to_book = [feelgood_activity]
+
+        for act in feelgood_activities["activities"]:
             for book_act in book_acts:
                 if (
                         book_act["name"] in act["ActivityType"]["name"] and
                         book_act["time"] in act["Activity"]["start"]
                 ):
-                    logger.info("Found activity matching:")
-                    logger.info(f"  {act['ActivityType']['name']}")
-                    logger.info(f"  {act['Activity']['start']}")
-
                     booking_url = (
                         f"{urls['base_url']}"
                         f"{urls['participate']}"
                         f"{act['Activity']['id']}"
                     )
-                    booking_urls.append(booking_url)
-        if booking_urls:
-            for burl in booking_urls:
+
+                    fa = feelgood_activity(
+                        url=booking_url,
+                        name=act["ActivityType"]["name"],
+                        start=act["Activity"]["start"],
+                    )
+                    if "start_time" in book_act:
+                        fa.set_start_time(book_act["start_time"])
+                    logger.info("Found activity matching:")
+                    logger.info(f"  {fa.name}")
+                    logger.info(f"  {fa.start}")
+
+                    activities_to_book.append(fa)
+
+        if activities_to_book:
+            for activity_to_book in activities_to_book:
                 params = {
                     "force": 1
                 }
@@ -252,9 +279,11 @@ def book(
                     },
                     "send_confirmation": 1
                 }
-                if book_act["name"] == "Boka":
-                    logger.info(f"  Start time: {book_act['start_time']}")
-                    hour_min_split = book_act["start_time"].split(":")
+                if "Boka" in activity_to_book.name:
+                    logger.info(
+                        f"  Start time: {activity_to_book.start_time}"
+                    )
+                    hour_min_split = activity_to_book.start_time.split(":")
                     epoch = datetime.datetime.combine(
                         future_date,
                         datetime.time(
@@ -268,14 +297,14 @@ def book(
 
                 if test:
                     logger.debug("Book act name")
-                    logger.debug(book_act["name"])
+                    logger.debug(activity_to_book.name)
                     logger.debug("Booking url that would be used:")
-                    logger.debug(burl)
+                    logger.debug(activity_to_book.url)
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
                 else:
                     r = s.post(
-                        burl,
+                        activity_to_book.url,
                         headers=headers,
                         params=params,
                         json=payload
@@ -286,12 +315,12 @@ def book(
                     ):
                         logger.success(
                             "Successfully booked "
-                            f"{act['ActivityType']['name']}"
+                            f"{activity_to_book.name}"
                         )
                     else:
                         logger.error(
                             "Something went wrong when booking"
-                            f" {book_act['name']}"
+                            f" {activity_to_book.name}"
                         )
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
