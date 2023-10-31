@@ -19,6 +19,9 @@ on:
           type: string
           description: use for Boka activity
 
+env:
+  LOGURU_LEVEL: DEBUG
+
 jobs:
   book-manual:
     runs-on: [self-hosted, KAV]

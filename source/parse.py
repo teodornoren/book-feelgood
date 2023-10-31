@@ -1,4 +1,75 @@
 import yaml
+import datetime
+import argparse
+from loguru import logger
+
+
+def initialize_parser() -> dict:
+    """
+    Needed input arguments for this program
+    """
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "-usr", "--username",
+        help="The username for feelgood login",
+        required=True
+    )
+
+    parser.add_argument(
+        "-pw", "--password",
+        help="The password for feelgood login",
+        required=True
+        )
+
+    parser.add_argument(
+        "-act", "--activities_file",
+        help="Activities.yml file to use",
+        required=False
+    )
+
+    parser.add_argument(
+        "-tst", "--test",
+        nargs='?',
+        help="Do a dry run",
+        type=bool,
+        default=False,
+        required=False
+    )
+
+    parser.add_argument(
+        "-t", "--time",
+        help="Add an optional time in place of config",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-n", "--name",
+        help="Add optional name in place of config",
+        required=False
+        )
+
+    parser.add_argument(
+        "-d", "--day",
+        help="Add optional day in place of config",
+        required=False
+    )
+
+    parser.add_argument(
+        "-do", "--day-offset",
+        help="Add optional offset day in place of config",
+        required=False
+    )
+
+    parser.add_argument(
+        "-st", "--start-time",
+        help="Optional start time for Boka activities",
+        required=False
+    )
+
+    parsed = parser.parse_args()
+
+    return vars(parsed)
 
 
 def parse_day(day: int | str) -> int | str:
@@ -84,3 +155,47 @@ def read_yaml(filename: str) -> dict:
             return yaml_blob
     except Exception as e:
         raise e
+
+
+def log_dict(dictionary: dict, indent: int = 0):
+    offset = ""
+    for _ in range(0, indent):
+        offset = f"{offset}  "
+    for key, item in dictionary.items():
+        if isinstance(item, dict):
+            logger.info(f"{offset}{key}:")
+            log_dict(item, indent=indent+1)
+        elif isinstance(item, list):
+            logger.info(f"{offset}{key}:")
+            for i in item:
+                log_dict(i, indent=indent+1)
+        else:
+            logger.info(f"{offset}{key}: {item}")
+
+
+def get_date(offset: int):
+    dt = datetime.date.today()
+    new_date = dt - datetime.timedelta(days=-offset)
+
+    logger.debug("Today:")
+    logger.debug(f"  Datetime is: {dt}")
+    logger.debug(f"  Weekday is: {parse_day(dt.isoweekday())}")
+    logger.debug("Offset day:")
+    logger.debug(f"  Datetime is: {new_date}")
+    logger.debug(f"  Weekday is: {parse_day(new_date.isoweekday())}")
+
+    return new_date
+
+
+def splash():
+    banner = read_yaml("config/banner.yml")
+    logger.success(banner["banner"])
+
+
+def load_config():
+    config = read_yaml("config/config.yml")
+    return (
+        config["settings"],
+        config["urls"],
+        config["headers"]
+    )
