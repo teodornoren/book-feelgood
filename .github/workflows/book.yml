@@ -14,6 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12' 
 
       - name: install requirements
         run: python3 -m pip install -r book_feelgood/requirements.txt
@@ -27,7 +30,7 @@ jobs:
 
       - name: Run booking action a
         run: >
-          python3 -m book_feelgood.book 
+          python -m book_feelgood.book 
           --username ${{ secrets.EXTRA_USER }} 
           --password ${{ secrets.EXTRA_PW }} 
           --activities_file a
