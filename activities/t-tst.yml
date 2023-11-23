@@ -1,5 +1,8 @@
 ---
 activities:
+  - name: Core
+    time: '11:00'
+    day: Wednesday
   - name: Badminton
     time: "14:00"
     day: Wednesday
