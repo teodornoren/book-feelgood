@@ -60,6 +60,8 @@ def book(
 ):
     splash()
     settings, urls, headers = load_config()
+    if activities_file:
+        logger.add(f"logs/{activities_file}.log")
 
     if test:
         logger.info("---running as test, no booking will be made---")
