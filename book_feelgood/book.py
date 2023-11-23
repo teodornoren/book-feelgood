@@ -205,6 +205,7 @@ def book(
                         params=params,
                         json=payload
                     )
+                    logger.debug(f"{r.json()=}")
                     if (
                         r.status_code == 200 and
                         r.json()["result"] == "ok"
