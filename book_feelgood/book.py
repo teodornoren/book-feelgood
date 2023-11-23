@@ -214,6 +214,10 @@ def book(
                         logger.success(f"  {activity_to_book.name}")
                         logger.success(f"  {activity_to_book.start}")
                         logger.success(f"  {activity_to_book.start_time}")
+                    elif (
+                        r.json()["error_code"] == 'ACTIVITY_FULL'
+                    ):
+                        logger.error("Activity is fully booked already.")
                     else:
                         logger.error("Something went wrong:")
                         logger.error(f"  {activity_to_book.name}")
@@ -221,7 +225,6 @@ def book(
                         logger.error(f"  {activity_to_book.start_time}")
                         logger.error(f"{r.status_code=}")
                         logger.error(f"{r.text=}")
-                        exit(666)
         else:
             logger.warning("No matching activity was found.")
 
