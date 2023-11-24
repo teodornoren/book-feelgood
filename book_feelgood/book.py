@@ -206,7 +206,7 @@ def book(
                         json=payload
                     )
                     logger.debug(f"{r.json()=}")
-                    logger.print(f"Username used: {username}")
+                    logger.info(f"Username used: {username}")
                     if (
                         r.status_code == 200 and
                         r.json()["result"] == "ok"
