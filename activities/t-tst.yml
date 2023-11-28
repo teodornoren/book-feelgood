@@ -4,3 +4,7 @@ activities:
     time: "18:00"
     day: Thursday
     start_time: "19:30"
+  - name: Boka
+    time: "13:30"
+    day: Tuesday
+    start_time: "13:30"
