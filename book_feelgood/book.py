@@ -205,7 +205,6 @@ def book(
                         params=params,
                         json=payload
                     )
-                    logger.debug(f"{r.json()=}")
                     logger.info(f"Username used: {username}")
                     if (
                         r.status_code == 200 and
@@ -250,7 +249,7 @@ def book(
                         logger.error(f"  {activity_to_book.start}")
                         logger.error(f"  {activity_to_book.start_time}")
                         logger.error(f"{r.status_code=}")
-                        logger.error(f"{r.text=}")
+                        logger.error(f"{r.json()=}")
         else:
             logger.warning("No matching activity was found.")
 
