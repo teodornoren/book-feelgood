@@ -219,11 +219,20 @@ def book(
                     elif (
                         "error_code" in r.json()
                     ):
-                        if r.json()["error_code"] == 'ACTIVITY_FULL':
+                        if (
+                            r.json()["error_code"] ==
+                            'ACTIVITY_FULL'
+                        ):
                             logger.error("Activity is fully booked already:")
                             logger.error(f"  {activity_to_book.name}")
                             logger.error(f"  {activity_to_book.start}")
                             logger.error(f"  {activity_to_book.start_time}")
+                        if (
+                            r.json()["error_code"] ==
+                            'ACTIVITY_BOOKING_TO_EARLY'
+                        ):
+                            logger.error("You are trying to book too soon:")
+                            logger.error(r.json()['message'])
                     elif (
                         "message" in r.json()
                     ):
