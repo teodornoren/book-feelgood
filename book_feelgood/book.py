@@ -224,6 +224,17 @@ def book(
                             logger.error(f"  {activity_to_book.name}")
                             logger.error(f"  {activity_to_book.start}")
                             logger.error(f"  {activity_to_book.start_time}")
+                    elif (
+                        "message" in r.json()
+                    ):
+                        if (
+                            r.json()["message"] ==
+                            'Denna tid är inte tillgänglig längre.'
+                        ):
+                            logger.error("Activity is fully booked already:")
+                            logger.error(f"  {activity_to_book.name}")
+                            logger.error(f"  {activity_to_book.start}")
+                            logger.error(f"  {activity_to_book.start_time}")
                     else:
                         logger.error("Something went wrong:")
                         logger.error(f"  {activity_to_book.name}")
