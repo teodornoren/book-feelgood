@@ -14,3 +14,5 @@ def fa_fixture():
 
 def test_feelgood_activity_init(fa_fixture):
     assert fa_fixture.url == "haha.se"
+    assert fa_fixture.name == "Badminton"
+    assert fa_fixture.start == "16:00"
