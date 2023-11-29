@@ -215,13 +215,15 @@ def book(
                         logger.success(f"  {activity_to_book.name}")
                         logger.success(f"  {activity_to_book.start}")
                         logger.success(f"  {activity_to_book.start_time}")
+
                     elif (
-                        r.json()["error_code"] == 'ACTIVITY_FULL'
+                        "error_code" in r.json()
                     ):
-                        logger.error("Activity is fully booked already:")
-                        logger.error(f"  {activity_to_book.name}")
-                        logger.error(f"  {activity_to_book.start}")
-                        logger.error(f"  {activity_to_book.start_time}")
+                        if r.json()["error_code"] == 'ACTIVITY_FULL':
+                            logger.error("Activity is fully booked already:")
+                            logger.error(f"  {activity_to_book.name}")
+                            logger.error(f"  {activity_to_book.start}")
+                            logger.error(f"  {activity_to_book.start_time}")
                     else:
                         logger.error("Something went wrong:")
                         logger.error(f"  {activity_to_book.name}")
