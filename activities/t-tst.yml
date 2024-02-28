@@ -1,14 +1,5 @@
 ---
 activities:
-  - name: Boka
-    time: "18:00"
+  - name: Cirkelträning
+    time: "11:00"
     day: Thursday
-    start_time: "19:30"
-  - name: Boka
-    time: "08:00"
-    day: Tuesday
-    start_time: "08:00"
-
-  - name: Spinning
-    time: "16:15"
-    day: Tuesday
