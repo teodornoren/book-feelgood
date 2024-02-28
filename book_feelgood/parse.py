@@ -38,7 +38,7 @@ def initialize_parser() -> dict:
     )
 
     parser.add_argument(
-        "-t", "--time",
+        "-t", "--book_time",
         help="Add an optional time in place of config",
         required=False,
     )

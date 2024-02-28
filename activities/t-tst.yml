@@ -8,3 +8,7 @@ activities:
     time: "08:00"
     day: Tuesday
     start_time: "08:00"
+
+  - name: Spinning
+    time: "16:15"
+    day: Tuesday

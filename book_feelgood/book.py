@@ -1,5 +1,7 @@
 from loguru import logger
 import datetime
+import time
+import sys
 import requests
 from book_feelgood.parse import (
         read_yaml,
@@ -52,16 +54,18 @@ def book(
         password: str,
         activities_file: str,
         test: bool,
-        time: str,
+        book_time: str,
         start_time: str,
         name: str,
         day: str,
         day_offset: str
 ):
     splash()
+    logger.remove()
+    logger.add(sys.stdout, enqueue=True)
     settings, urls, headers = load_config()
     if activities_file:
-        logger.add(f"logs/{activities_file}.log")
+        logger.add(f"logs/{activities_file}.log", enqueue=True)
 
     if test:
         logger.info("---running as test, no booking will be made---")
@@ -74,12 +78,12 @@ def book(
     else:
         if (
             name and
-            time and
+            book_time and
             day
         ):
             test_act = {
                     "name": name,
-                    "time": time,
+                    "time": book_time,
                     "day": day
                 }
             if start_time:
@@ -199,6 +203,22 @@ def book(
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
                 else:
+                    hour_goal = 8
+                    minute_goal = 0
+                    time_goal = datetime.datetime(
+                        year=datetime.date.today().year,
+                        month=datetime.date.today().month,
+                        day=datetime.date.today().day,
+                        hour=hour_goal,
+                        minute=minute_goal,
+                        second=0,
+                        microsecond=0
+                    )
+                    diff = time_goal - datetime.datetime.now()
+                    logger.info(f"Sleeping for: {diff}")
+                    if diff > 0:
+                        time.sleep(diff.total_seconds())
+                    logger.success("Done sleeping")
                     r = s.post(
                         activity_to_book.url,
                         headers=headers,
