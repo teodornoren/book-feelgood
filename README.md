@@ -8,7 +8,7 @@ This Python script is designed to automate the booking process for activities on
 
 Before using this script, make sure you have the following prerequisites:
 
-- Python 3.x installed on your system.
+- Python >= 3.10 installed on your system.
 - Required Python packages installed. You can install them using `pip`:
   ```bash
   pip install requirements.txt
