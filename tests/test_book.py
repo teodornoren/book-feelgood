@@ -4,11 +4,7 @@ from book_feelgood.book import Feelgood_Activity
 
 @pytest.fixture
 def fa_fixture():
-    fa = Feelgood_Activity(
-        url="haha.se",
-        name="Badminton",
-        start="16:00"
-    )
+    fa = Feelgood_Activity(url="haha.se", name="Badminton", start="16:00")
     return fa
 
 

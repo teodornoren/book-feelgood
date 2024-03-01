@@ -11,60 +11,69 @@ def initialize_parser() -> dict:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-usr", "--username",
+        "-usr",
+        "--username",
         help="The username for feelgood login",
-        required=True
+        required=True,
     )
 
     parser.add_argument(
-        "-pw", "--password",
+        "-pw",
+        "--password",
         help="The password for feelgood login",
-        required=True
-        )
-
-    parser.add_argument(
-        "-act", "--activities_file",
-        help="Activities.yml file to use",
-        required=False
+        required=True,
     )
 
     parser.add_argument(
-        "-tst", "--test",
-        nargs='?',
+        "-act",
+        "--activities_file",
+        help="Activities.yml file to use",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-tst",
+        "--test",
+        nargs="?",
         help="Do a dry run",
         type=bool,
         default=False,
-        required=False
+        required=False,
     )
 
     parser.add_argument(
-        "-t", "--book_time",
+        "-t",
+        "--book_time",
         help="Add an optional time in place of config",
         required=False,
     )
 
     parser.add_argument(
-        "-n", "--name",
+        "-n",
+        "--name",
         help="Add optional name in place of config",
-        required=False
-        )
+        required=False,
+    )
 
     parser.add_argument(
-        "-d", "--day",
+        "-d",
+        "--day",
         help="Add optional day in place of config",
-        required=False
+        required=False,
     )
 
     parser.add_argument(
-        "-do", "--day-offset",
+        "-do",
+        "--day-offset",
         help="Add optional offset day in place of config",
-        required=False
+        required=False,
     )
 
     parser.add_argument(
-        "-st", "--start-time",
+        "-st",
+        "--start-time",
         help="Optional start time for Boka activities",
-        required=False
+        required=False,
     )
 
     parsed = parser.parse_args()
@@ -164,11 +173,11 @@ def log_dict(dictionary: dict, indent: int = 0):
     for key, item in dictionary.items():
         if isinstance(item, dict):
             logger.info(f"{offset}{key}:")
-            log_dict(item, indent=indent+1)
+            log_dict(item, indent=indent + 1)
         elif isinstance(item, list):
             logger.info(f"{offset}{key}:")
             for i in item:
-                log_dict(i, indent=indent+1)
+                log_dict(i, indent=indent + 1)
         else:
             logger.info(f"{offset}{key}: {item}")
 
@@ -194,8 +203,4 @@ def splash():
 
 def load_config():
     config = read_yaml("config/config.yml")
-    return (
-        config["settings"],
-        config["urls"],
-        config["headers"]
-    )
+    return (config["settings"], config["urls"], config["headers"])

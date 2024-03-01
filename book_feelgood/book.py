@@ -4,25 +4,18 @@ import time
 import sys
 import requests
 from book_feelgood.parse import (
-        read_yaml,
-        parse_day,
-        log_dict,
-        get_date,
-        load_config,
-        splash,
-        initialize_parser
-    )
+    read_yaml,
+    parse_day,
+    log_dict,
+    get_date,
+    load_config,
+    splash,
+    initialize_parser,
+)
 
 
 class Feelgood_Activity:
-    def __init__(
-            self,
-            url: str,
-            name: str,
-            start: str,
-            start_time=0
-
-    ) -> None:
+    def __init__(self, url: str, name: str, start: str, start_time=0) -> None:
         self._url = url
         self._name = name
         self._start = start
@@ -50,15 +43,15 @@ class Feelgood_Activity:
 
 
 def book(
-        username: str,
-        password: str,
-        activities_file: str,
-        test: bool,
-        book_time: str,
-        start_time: str,
-        name: str,
-        day: str,
-        day_offset: str
+    username: str,
+    password: str,
+    activities_file: str,
+    test: bool,
+    book_time: str,
+    start_time: str,
+    name: str,
+    day: str,
+    day_offset: str,
 ):
     splash()
     logger.remove()
@@ -76,16 +69,8 @@ def book(
             f"Running using activities from activities/{activities_file}.yml"
         )
     else:
-        if (
-            name and
-            book_time and
-            day
-        ):
-            test_act = {
-                    "name": name,
-                    "time": book_time,
-                    "day": day
-                }
+        if name and book_time and day:
+            test_act = {"name": name, "time": book_time, "day": day}
             if start_time:
                 test_act["start_time"] = start_time
             activities = {}
@@ -116,9 +101,7 @@ def book(
         exit(0)
 
     with requests.session() as s:
-        get_activities_url = (
-            f"{urls['base_url']}{urls['list']}"
-        )
+        get_activities_url = f"{urls['base_url']}{urls['list']}"
 
         params = {
             "from": future_date,
@@ -126,15 +109,10 @@ def book(
             "today": 0,
             "mine": 0,
             "only_try_it": 0,
-            "facility": settings['facility']
+            "facility": settings["facility"],
         }
 
-        payload = {
-            "User": {
-                "email": username,
-                "password": password
-                }
-        }
+        payload = {"User": {"email": username, "password": password}}
 
         s.post(f"{urls['base_url']}", json=payload)
         r = s.get(get_activities_url, params=params, headers=headers)
@@ -145,8 +123,8 @@ def book(
         for f_act in feelgood_activities["activities"]:
             for yml_act in yml_acts:
                 if (
-                        yml_act["name"] in f_act["ActivityType"]["name"] and
-                        yml_act["time"] in f_act["Activity"]["start"]
+                    yml_act["name"] in f_act["ActivityType"]["name"]
+                    and yml_act["time"] in f_act["Activity"]["start"]
                 ):
                     booking_url = (
                         f"{urls['base_url']}"
@@ -160,7 +138,7 @@ def book(
                         start=f_act["Activity"]["start"],
                     )
                     if "start_time" in yml_act:
-                        fa.start_time = (yml_act["start_time"])
+                        fa.start_time = yml_act["start_time"]
                     logger.info("Found activity matching:")
                     logger.info(f"  {fa.name}")
                     logger.info(f"  {fa.start}")
@@ -169,28 +147,20 @@ def book(
 
         if activities_to_book:
             for activity_to_book in activities_to_book:
-                params = {
-                    "force": 1
-                }
+                params = {"force": 1}
                 payload = {
-                    "ActivityBooking": {
-                        "participants": 1,
-                        "resources": {}
-                    },
-                    "send_confirmation": 1
+                    "ActivityBooking": {"participants": 1, "resources": {}},
+                    "send_confirmation": 1,
                 }
                 if "Boka" in activity_to_book.name:
-                    logger.info(
-                        f"  Start time: {activity_to_book.start_time}"
-                    )
+                    logger.info(f"  Start time: {activity_to_book.start_time}")
                     hour_min_split = activity_to_book.start_time.split(":")
                     epoch = datetime.datetime.combine(
                         future_date,
                         datetime.time(
-                            int(hour_min_split[0]),
-                            int(hour_min_split[1])
-                        )
-                        ).timestamp()
+                            int(hour_min_split[0]), int(hour_min_split[1])
+                        ),
+                    ).timestamp()
                     epoch = int(epoch)
                     payload["ActivityBooking"]["book_start"] = str(epoch)
                     payload["ActivityBooking"]["book_length"] = "30"
@@ -212,7 +182,7 @@ def book(
                         hour=hour_goal,
                         minute=minute_goal,
                         second=0,
-                        microsecond=0
+                        microsecond=0,
                     )
                     diff = time_goal - datetime.datetime.now()
                     logger.info(f"Sleeping for: {diff}")
@@ -229,41 +199,31 @@ def book(
                         activity_to_book.url,
                         headers=headers,
                         params=params,
-                        json=payload
+                        json=payload,
                     )
                     logger.info(f"Username used: {username}")
-                    if (
-                        r.status_code == 200 and
-                        r.json()["result"] == "ok"
-                    ):
+                    if r.status_code == 200 and r.json()["result"] == "ok":
                         logger.success("Successfully booked:")
                         logger.success(f"  {activity_to_book.name}")
                         logger.success(f"  {activity_to_book.start}")
                         logger.success(f"  {activity_to_book.start_time}")
 
-                    elif (
-                        "error_code" in r.json()
-                    ):
-                        if (
-                            r.json()["error_code"] ==
-                            'ACTIVITY_FULL'
-                        ):
+                    elif "error_code" in r.json():
+                        if r.json()["error_code"] == "ACTIVITY_FULL":
                             logger.error("Activity is fully booked already:")
                             logger.error(f"  {activity_to_book.name}")
                             logger.error(f"  {activity_to_book.start}")
                             logger.error(f"  {activity_to_book.start_time}")
                         if (
-                            r.json()["error_code"] ==
-                            'ACTIVITY_BOOKING_TO_EARLY'
+                            r.json()["error_code"]
+                            == "ACTIVITY_BOOKING_TO_EARLY"
                         ):
                             logger.error("You are trying to book too soon:")
-                            logger.error(r.json()['message'])
-                    elif (
-                        "message" in r.json()
-                    ):
+                            logger.error(r.json()["message"])
+                    elif "message" in r.json():
                         if (
-                            r.json()["message"] ==
-                            'Denna tid är inte tillgänglig längre.'
+                            r.json()["message"]
+                            == "Denna tid är inte tillgänglig längre."
                         ):
                             logger.error("Activity is fully booked already:")
                             logger.error(f"  {activity_to_book.name}")
