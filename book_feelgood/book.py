@@ -203,8 +203,8 @@ def book(
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
                 else:
-                    hour_goal = 8
-                    minute_goal = 0
+                    hour_goal = 21
+                    minute_goal = 1
                     time_goal = datetime.datetime(
                         year=datetime.date.today().year,
                         month=datetime.date.today().month,
@@ -216,8 +216,14 @@ def book(
                     )
                     diff = time_goal - datetime.datetime.now()
                     logger.info(f"Sleeping for: {diff}")
-                    if diff > 0:
+                    if diff.total_seconds() > 0.0:
                         time.sleep(diff.total_seconds())
+                    else:
+                        logger.error(
+                            "Time difference negative."
+                            " Check hour_goal and minute_goal vars"
+                        )
+                        exit()
                     logger.success("Done sleeping")
                     r = s.post(
                         activity_to_book.url,
