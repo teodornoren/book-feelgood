@@ -52,7 +52,7 @@ def book(
     name: str,
     day: str,
     day_offset: str,
-):
+):  # pragma: no cover
     splash()
     logger.remove()
     logger.add(sys.stdout, enqueue=True)
