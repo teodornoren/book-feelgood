@@ -16,11 +16,14 @@ repository = "https://github.com/teodornoren/book-feelgood"
 packages = ["book_feelgood"]
 
 [project.optional-dependencies]
+tests = [
+  "coverage",
+  "pytest",
+]
 ci = [
   "black",
   "flake8",
 ]
-
 
 [tool.black]
 line-length = 80
