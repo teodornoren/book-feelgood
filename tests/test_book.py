@@ -1,10 +1,10 @@
 import pytest
-from book_feelgood.book import feelgood_activity
+from book_feelgood.book import Feelgood_Activity
 
 
 @pytest.fixture
 def fa_fixture():
-    fa = feelgood_activity(
+    fa = Feelgood_Activity(
         url="haha.se",
         name="Badminton",
         start="16:00"

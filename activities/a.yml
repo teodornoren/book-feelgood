@@ -1,9 +1,5 @@
 ---
 activities:
-  - name: Boka
-    time: "13:30"
-    day: Monday
-    start_time: "15:30"
   - name: Badminton
     time: "15:00"
     day: Wednesday

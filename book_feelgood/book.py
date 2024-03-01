@@ -14,7 +14,7 @@ from book_feelgood.parse import (
     )
 
 
-class feelgood_activity:
+class Feelgood_Activity:
     def __init__(
             self,
             url: str,
@@ -154,7 +154,7 @@ def book(
                         f"{f_act['Activity']['id']}"
                     )
 
-                    fa = feelgood_activity(
+                    fa = Feelgood_Activity(
                         url=booking_url,
                         name=f_act["ActivityType"]["name"],
                         start=f_act["Activity"]["start"],
@@ -203,8 +203,8 @@ def book(
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
                 else:
-                    hour_goal = 21
-                    minute_goal = 1
+                    hour_goal = 8
+                    minute_goal = 0
                     time_goal = datetime.datetime(
                         year=datetime.date.today().year,
                         month=datetime.date.today().month,
@@ -236,7 +236,7 @@ def book(
                         r.status_code == 200 and
                         r.json()["result"] == "ok"
                     ):
-                        logger.success("Successfully booked for:")
+                        logger.success("Successfully booked:")
                         logger.success(f"  {activity_to_book.name}")
                         logger.success(f"  {activity_to_book.start}")
                         logger.success(f"  {activity_to_book.start_time}")

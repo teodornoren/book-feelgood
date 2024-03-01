@@ -1,14 +1,22 @@
 ---
 activities:
   - name: Boka
-    time: "13:00"
-    day: Wednesday
+    time: "13:30"
+    day: Monday
     start_time: "14:30"
   - name: Boka
-    time: "13:00"
-    day: Wednesday
+    time: "13:30"
+    day: Monday
     start_time: "15:00"
   - name: Boka
-    time: "13:00"
-    day: Wednesday
+    time: "13:30"
+    day: Monday
     start_time: "15:30"
+
+  - name: Badminton
+    time: "15:00"
+    day: Wednesday
+
+  - name: Spinning
+    time: "15:00"
+    day: Friday
