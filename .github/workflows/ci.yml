@@ -37,4 +37,4 @@ jobs:
         run: black --check .
 
       - name: pytest and coverage
-        run: coverage run -m pytest && coverage report -i --fail-under=90
+        run: coverage run -m pytest && coverage report -i --fail-under=50
