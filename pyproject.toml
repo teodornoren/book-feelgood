@@ -25,6 +25,13 @@ ci = [
   "flake8",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+include = ["book_feelgood/*"]
+omit = ["tests"]
+
 [tool.black]
 line-length = 80
 target-version = ['py310']

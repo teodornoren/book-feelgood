@@ -1,4 +1,6 @@
 # book-feelgood
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![Lint the code](https://github.com/teodornoren/book-feelgood/actions/workflows/ci.yml/badge.svg)
 
 This Python script is designed to automate the booking process for activities on the FeelGood platform. It allows you to book or unbook activities with ease. Below, you'll find instructions on how to use this script effectively.
 
@@ -9,7 +11,7 @@ Before using this script, make sure you have the following prerequisites:
 - Python 3.x installed on your system.
 - Required Python packages installed. You can install them using `pip`:
   ```bash
-  pip install requests
+  pip install requirements.txt
   ```
 
 ## Usage
