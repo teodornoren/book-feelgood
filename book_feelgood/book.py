@@ -247,7 +247,7 @@ def wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
         time.sleep(diff.total_seconds())
         logger.success("Done sleeping")
     else:
-        logger.error("Time difference negative. Booking immediately!")
+        logger.warning("Time difference negative. Booking immediately!")
 
 
 if __name__ == "__main__":
