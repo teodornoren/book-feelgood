@@ -20,3 +20,12 @@ activities:
   - name: Spinning
     time: "15:00"
     day: Friday
+
+  - name: Boka
+    time: "09:00"
+    day: Saturday
+    start_time: "09:00"
+  - name: Boka
+    time: "09:00"
+    day: Saturday
+    start_time: "09:30"
