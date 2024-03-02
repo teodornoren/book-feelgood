@@ -175,7 +175,8 @@ def book(
                 else:
                     hour_goal = 8
                     minute_goal = 0
-                    wait_for_time(hour_goal, minute_goal)
+                    second_goal = 0
+                    wait_for_time(hour_goal, minute_goal, second_goal)
 
                     r = s.post(
                         activity_to_book.url,
