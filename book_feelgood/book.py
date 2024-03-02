@@ -185,6 +185,7 @@ def book(
                         json=payload,
                     )
                     logger.info(f"Username used: {username}")
+                    logger.debug(r.json())
                     if r.status_code == 200 and r.json()["result"] == "ok":
                         logger.success("Successfully booked:")
                         logger.success(f"  {activity_to_book.name}")
