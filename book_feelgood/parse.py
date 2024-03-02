@@ -204,3 +204,7 @@ def splash():
 def load_config():
     config = read_yaml("config/config.yml")
     return (config["settings"], config["urls"], config["headers"])
+
+
+if __name__ == "__main__":
+    initialize_parser()

@@ -175,26 +175,8 @@ def book(
                 else:
                     hour_goal = 8
                     minute_goal = 0
-                    time_goal = datetime.datetime(
-                        year=datetime.date.today().year,
-                        month=datetime.date.today().month,
-                        day=datetime.date.today().day,
-                        hour=hour_goal,
-                        minute=minute_goal,
-                        second=0,
-                        microsecond=0,
-                    )
-                    diff = time_goal - datetime.datetime.now()
-                    logger.info(f"Sleeping for: {diff}")
-                    if diff.total_seconds() > 0.0:
-                        time.sleep(diff.total_seconds())
-                    else:
-                        logger.error(
-                            "Time difference negative."
-                            " Check hour_goal and minute_goal vars"
-                        )
-                        exit()
-                    logger.success("Done sleeping")
+                    wait_for_time(hour_goal, minute_goal)
+
                     r = s.post(
                         activity_to_book.url,
                         headers=headers,
@@ -238,6 +220,33 @@ def book(
                         logger.error(f"{r.json()=}")
         else:
             logger.warning("No matching activity was found.")
+
+
+def wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
+    """
+    Wait until we reach specific time today, if time is negative,
+    do not wait.
+
+    Args:
+        hour_goal: hour to wait for
+        minute_goal: minute in hour to wait for
+    """
+    time_goal = datetime.datetime(
+        year=datetime.date.today().year,
+        month=datetime.date.today().month,
+        day=datetime.date.today().day,
+        hour=hour_goal,
+        minute=minute_goal,
+        second=second_goal,
+        microsecond=0,
+    )
+    diff = time_goal - datetime.datetime.now()
+    logger.info(f"Sleeping for: {diff}")
+    if diff.total_seconds() > 0.0:
+        time.sleep(diff.total_seconds())
+        logger.success("Done sleeping")
+    else:
+        logger.error("Time difference negative. Booking immediately!")
 
 
 if __name__ == "__main__":

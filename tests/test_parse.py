@@ -1,6 +1,12 @@
 import pytest
 
-from book_feelgood.parse import parse_day
+from book_feelgood.parse import (
+    parse_day,
+    splash,
+    load_config,
+    read_yaml,
+    # initialize_parser,
+)
 
 
 def test_parse_day_all():
@@ -39,3 +45,29 @@ def test_parse_day_int_value_error():
         match=f"Could not parse input as a day: int: {random_number}",
     ):
         parse_day(random_number)
+
+
+def test_splash():
+    splash()
+
+
+def test_load_config():
+    settings, urls, config = load_config()
+    assert bool(settings) is True
+    assert bool(urls) is True
+    assert bool(config) is True
+
+
+def test_load_unexisting_yml():
+    with pytest.raises(Exception):
+        read_yaml("config/dummy.yml")
+
+
+# def test_initialize_parser_help(capsys):
+#     try:
+#         initialize_parser()
+#     except SystemExit:
+#         pass
+#     output = capsys.readouterr().out
+#     print(output)
+#     assert "-usr USERNAME -pw PASSWORD" in output
