@@ -185,28 +185,34 @@ def book(
                         json=payload,
                     )
                     logger.info(f"Username used: {username}")
-                    logger.debug(r.json())
-                    if r.status_code == 200 and r.json()["result"] == "ok":
+                    json = r.json()
+                    if r.status_code == 200 and json["result"] == "ok":
                         logger.success("Successfully booked:")
                         logger.success(f"  {activity_to_book.name}")
                         logger.success(f"  {activity_to_book.start}")
                         logger.success(f"  {activity_to_book.start_time}")
 
-                    elif "error_code" in r.json():
-                        if r.json()["error_code"] == "ACTIVITY_FULL":
+                    elif "error_code" in json:
+                        if json["error_code"] == "ACTIVITY_FULL":
                             logger.error("Activity is fully booked already:")
                             logger.error(f"  {activity_to_book.name}")
                             logger.error(f"  {activity_to_book.start}")
                             logger.error(f"  {activity_to_book.start_time}")
-                        if (
-                            r.json()["error_code"]
+                        elif (
+                            json["error_code"]
                             == "ACTIVITY_BOOKING_TO_EARLY"
                         ):
                             logger.error("You are trying to book too soon:")
-                            logger.error(r.json()["message"])
-                    elif "message" in r.json():
+                            logger.error(json["message"])
+                        elif json["error_code"] == "USER_ALREADY_BOOKED":
+                            logger.error("You are already booked:")
+                            logger.error(json["message"])
+                        else:
+                            logger.error("Unhandled response from feelgood:")
+                            logger.error(f"{json=}")
+                    elif "message" in json:
                         if (
-                            r.json()["message"]
+                            json["message"]
                             == "Denna tid är inte tillgänglig längre."
                         ):
                             logger.error("Activity is fully booked already:")
@@ -219,7 +225,7 @@ def book(
                         logger.error(f"  {activity_to_book.start}")
                         logger.error(f"  {activity_to_book.start_time}")
                         logger.error(f"{r.status_code=}")
-                        logger.error(f"{r.json()=}")
+                        logger.error(f"{json=}")
         else:
             logger.warning("No matching activity was found.")
 

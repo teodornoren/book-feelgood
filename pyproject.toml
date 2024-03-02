@@ -33,6 +33,6 @@ include = ["book_feelgood/*"]
 omit = ["tests"]
 
 [tool.black]
-line-length = 80
+line-length = 79
 target-version = ['py310']
 include = '\.pyi?$'
