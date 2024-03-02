@@ -198,10 +198,7 @@ def book(
                             logger.error(f"  {activity_to_book.name}")
                             logger.error(f"  {activity_to_book.start}")
                             logger.error(f"  {activity_to_book.start_time}")
-                        elif (
-                            json["error_code"]
-                            == "ACTIVITY_BOOKING_TO_EARLY"
-                        ):
+                        elif json["error_code"] == "ACTIVITY_BOOKING_TO_EARLY":
                             logger.error("You are trying to book too soon:")
                             logger.error(json["message"])
                         elif json["error_code"] == "USER_ALREADY_BOOKED":
