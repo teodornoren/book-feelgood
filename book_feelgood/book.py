@@ -10,7 +10,6 @@ from book_feelgood.parse import (
     get_date,
     load_config,
     splash,
-    initialize_parser,
 )
 
 
@@ -141,15 +140,9 @@ def book(
                     "send_confirmation": 1,
                 }
                 if "Boka" in activity_to_book.name:
-                    logger.info(f"  Start time: {activity_to_book.start_time}")
-                    hour_min_split = activity_to_book.start_time.split(":")
-                    epoch = datetime.datetime.combine(
-                        future_date,
-                        datetime.time(
-                            int(hour_min_split[0]), int(hour_min_split[1])
-                        ),
-                    ).timestamp()
-                    epoch = int(epoch)
+                    epoch = _get_simple_epoch(
+                        future_date, activity_to_book.start_time
+                    )
                     payload["ActivityBooking"]["book_start"] = str(epoch)
                     payload["ActivityBooking"]["book_length"] = "30"
 
@@ -173,49 +166,53 @@ def book(
                         json=payload,
                     )
                     logger.info(f"Username used: {username}")
-                    json = r.json()
-                    if r.status_code == 200 and json["result"] == "ok":
-                        logger.success("Successfully booked:")
-                        logger.success(f"  {activity_to_book.name}")
-                        logger.success(f"  {activity_to_book.start}")
-                        logger.success(f"  {activity_to_book.start_time}")
-
-                    elif "error_code" in json:
-                        if json["error_code"] == "ACTIVITY_FULL":
-                            logger.error("Activity is fully booked already:")
-                            logger.error(f"  {activity_to_book.name}")
-                            logger.error(f"  {activity_to_book.start}")
-                            logger.error(f"  {activity_to_book.start_time}")
-                        elif json["error_code"] == "ACTIVITY_BOOKING_TO_EARLY":
-                            logger.error("You are trying to book too soon:")
-                            logger.error(json["message"])
-                        elif json["error_code"] == "USER_ALREADY_BOOKED":
-                            logger.error("You are already booked:")
-                            logger.error(json["message"])
-                        else:
-                            logger.error("Unhandled response from feelgood:")
-                            logger.error(f"{json=}")
-                    elif "message" in json:
-                        if (
-                            json["message"]
-                            == "Denna tid är inte tillgänglig längre."
-                        ):
-                            logger.error("Activity is fully booked already:")
-                            logger.error(f"  {activity_to_book.name}")
-                            logger.error(f"  {activity_to_book.start}")
-                            logger.error(f"  {activity_to_book.start_time}")
-                    else:
-                        logger.error("Something went wrong:")
-                        logger.error(f"  {activity_to_book.name}")
-                        logger.error(f"  {activity_to_book.start}")
-                        logger.error(f"  {activity_to_book.start_time}")
-                        logger.error(f"{r.status_code=}")
-                        logger.error(f"{json=}")
+                    _parse_response(r, activity_to_book)
         else:
             logger.warning("No matching activity was found.")
 
 
-def _activities_to_book(urls: dict, yml_acts, feelgood_activities) -> list:
+def _parse_response(r, activity_to_book):
+    json = r.json()
+    if r.status_code == 200 and json["result"] == "ok":
+        logger.success(f"Successfully booked: {activity_to_book}")
+
+    elif "error_code" in json:
+        log_error = ""
+        if json["error_code"] == "ACTIVITY_FULL":
+            log_error = "Activity is fully booked already:"
+        elif json["error_code"] == "ACTIVITY_BOOKING_TO_EARLY":
+            log_error = "You are trying to book too soon:"
+        elif json["error_code"] == "USER_ALREADY_BOOKED":
+            log_error = "You are already booked:"
+        else:
+            log_error = "Unhandled response from feelgood:\n"
+            log_dict(json)
+        logger.error(f"{log_error} {activity_to_book}")
+    elif "message" in json:
+        if json["message"] == "Denna tid är inte tillgänglig längre.":
+            logger.error(
+                f"Activity is fully booked already: {activity_to_book}"
+            )
+    else:
+        logger.error(f"Something went wrong: {activity_to_book}")
+        logger.error(f"{r.status_code=}")
+        logger.error(f"{json=}")
+
+
+def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
+    logger.info(f"  Start time: {time}")
+    hour_min_split = time.split(":")
+    epoch = datetime.datetime.combine(
+        date=date,
+        time=datetime.time(int(hour_min_split[0]), int(hour_min_split[1])),
+    ).timestamp()
+    epoch = int(epoch)
+    return epoch
+
+
+def _activities_to_book(
+    urls: dict, yml_acts: list[dict], feelgood_activities: list[dict]
+) -> list[Feelgood_Activity]:
     act_to_book = []
     for f_act in feelgood_activities["activities"]:
         for yml_act in yml_acts:
@@ -271,7 +268,3 @@ def _wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
         logger.success("Done sleeping")
     else:
         logger.warning("Time difference negative. Booking immediately!")
-
-
-if __name__ == "__main__":
-    book(**initialize_parser())

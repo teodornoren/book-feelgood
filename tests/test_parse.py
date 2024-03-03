@@ -1,7 +1,6 @@
 import pytest
 import datetime
 import shlex
-from loguru import logger
 
 from book_feelgood.parse import (
     parse_day,
@@ -12,13 +11,6 @@ from book_feelgood.parse import (
     log_dict,
     initialize_parser,
 )
-
-
-@pytest.fixture
-def caplog(caplog):
-    handler_id = logger.add(caplog.handler, format="{message}")
-    yield caplog
-    logger.remove(handler_id)
 
 
 def test_parse_day_all():

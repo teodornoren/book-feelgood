@@ -1,18 +1,12 @@
-import pytest
+from requests.models import Response
 from datetime import datetime, timedelta
 from book_feelgood.book import (
     Feelgood_Activity,
+    _parse_response,
     _wait_for_time,
     _activities_to_book,
+    _get_simple_epoch,
 )
-
-
-@pytest.fixture
-def fa_fixture():
-    fa = Feelgood_Activity(url="haha.se", name="Badminton", start="16:00")
-
-    fa.start_time = 123123123123123123
-    return fa
 
 
 def test_feelgood_activity_init(fa_fixture):
@@ -20,6 +14,80 @@ def test_feelgood_activity_init(fa_fixture):
     assert fa_fixture.name == "Badminton"
     assert fa_fixture.start == "16:00"
     assert fa_fixture.start_time == 123123123123123123
+
+
+def test_parse_response_success(caplog, fa_fixture):
+    r = Response()
+    r.status_code = 200
+    r._content = b'{"result": "ok"}'
+    _parse_response(r, fa_fixture)
+    assert (
+        "Successfully booked: Feelgood_Activity: "
+        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    )
+
+
+def test_parse_response_activity_full(caplog, fa_fixture):
+    r = Response()
+    r._content = b'{"error_code": "ACTIVITY_FULL"}'
+    _parse_response(r, fa_fixture)
+    assert (
+        "Activity is fully booked already: Feelgood_Activity: "
+        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    )
+
+
+def test_parse_response_too_early(caplog, fa_fixture):
+    r = Response()
+    r._content = b'{"error_code": "ACTIVITY_BOOKING_TO_EARLY"}'
+    _parse_response(r, fa_fixture)
+    assert (
+        "You are trying to book too soon: Feelgood_Activity: "
+        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    )
+
+
+def test_parse_response_already_booked(caplog, fa_fixture):
+    r = Response()
+    r._content = b'{"error_code": "USER_ALREADY_BOOKED"}'
+    _parse_response(r, fa_fixture)
+    assert (
+        "You are already booked: Feelgood_Activity: "
+        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    )
+
+
+def test_parse_response_unhandled_error(caplog, fa_fixture):
+    r = Response()
+    r._content = b'{"error_code": "OH_SHIT"}'
+    _parse_response(r, fa_fixture)
+    assert "Unhandled response from feelgood:" in caplog.text
+    assert "OH_SHIT" in caplog.text
+
+
+def test_parse_response_message_this_time_etc(caplog, fa_fixture):
+    r = Response()
+    r._content = bytes(
+        '{"message": "Denna tid är inte tillgänglig längre."}', "utf-8"
+    )
+    _parse_response(r, fa_fixture)
+    assert (
+        "Activity is fully booked already: Feelgood_Activity: " in caplog.text
+    )
+    assert "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+
+
+def test_parse_response_unknown(caplog, fa_fixture):
+    r = Response()
+    r.status_code = 666
+    r._content = b'{"manmana": "duuuduuu dudu"}'
+    _parse_response(r, fa_fixture)
+    assert (
+        "Feelgood_Activity: "
+        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    )
+    assert "r.status_code=666" in caplog.text
+    assert "{'manmana': 'duuuduuu dudu'}" in caplog.text
 
 
 def test_activities_to_book():
@@ -90,6 +158,14 @@ def test_activities_to_book():
     )
 
     assert result[0] == expected_fa_1
+
+
+def test_get_simple_epoch():
+    now = datetime.today().replace(second=0, microsecond=0)
+    epoch = _get_simple_epoch(
+        now.date(), now.time().isoformat(timespec="minutes")
+    )
+    assert epoch == int(now.timestamp())
 
 
 def test_wait_for_time_positive():
