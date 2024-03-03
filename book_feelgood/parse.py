@@ -165,6 +165,17 @@ def read_yaml(filename: str) -> dict:
 
 
 def log_dict(dictionary: dict, indent: int = 0):
+    """
+    Log the contents of a dictionary recursively, with optional indentation.
+
+    Args:
+        dictionary (dict): The dictionary to log.
+        indent (int, optional): The level of indentation for logging.
+            Defaults to 0.
+
+    Returns:
+        None
+    """
     offset = ""
     for _ in range(0, indent):
         offset = f"{offset}  "
@@ -180,7 +191,16 @@ def log_dict(dictionary: dict, indent: int = 0):
             logger.info(f"{offset}{key}: {item}")
 
 
-def get_date(day_offset: int):
+def get_date(day_offset: int) -> datetime.date:
+    """
+    Get the date with a specified offset from today.
+
+    Args:
+        day_offset (int): The number of days to offset from today.
+
+    Returns:
+        datetime.date: The date with the specified offset.
+    """
     dt = datetime.date.today()
     new_date = dt + datetime.timedelta(days=day_offset)
 

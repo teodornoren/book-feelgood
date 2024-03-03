@@ -62,7 +62,24 @@ def book(
     name: str,
     day: str,
     day_offset: str,
-):  # pragma: no cover
+) -> None:  # pragma: no cover
+    """
+    Book activities based on provided parameters.
+
+    Args:
+        username (str): The username for logging in.
+        password (str): The password for logging in.
+        activities_file (str): The file containing activity details.
+        test (bool): Flag indicating whether to run in test mode.
+        book_time (str): The time to book the activity.
+        start_time (str): The start time of the activity.
+        name (str): The name of the activity.
+        day (str): The day of the activity.
+        day_offset (str): The offset for the booking day.
+
+    Returns:
+        None
+    """
     splash()
     logger.remove()
     logger.add(sys.stdout, enqueue=True)
@@ -171,7 +188,17 @@ def book(
             logger.warning("No matching activity was found.")
 
 
-def _parse_response(r, activity_to_book):
+def _parse_response(r, activity_to_book) -> None:
+    """
+    Parse the response from the booking API and log relevant information.
+
+    Args:
+        r (Response): The HTTP response object.
+        activity_to_book (str): The activity being booked.
+
+    Returns:
+        None
+    """
     json = r.json()
     if r.status_code == 200 and json["result"] == "ok":
         logger.success(f"Successfully booked: {activity_to_book}")
@@ -200,6 +227,17 @@ def _parse_response(r, activity_to_book):
 
 
 def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
+    """
+    Convert a given date and time string to a Unix epoch timestamp.
+
+    Args:
+        date (datetime.datetime): The date for which the time is provided.
+        time (str): The time in "HH:MM" format.
+
+    Returns:
+        int: The Unix epoch timestamp
+            corresponding to the provided date and time.
+    """
     logger.info(f"  Start time: {time}")
     hour_min_split = time.split(":")
     epoch = datetime.datetime.combine(
@@ -213,6 +251,22 @@ def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
 def _activities_to_book(
     urls: dict, yml_acts: list[dict], feelgood_activities: list[dict]
 ) -> list[Feelgood_Activity]:
+    """
+    Generate a list of Feelgood_Activity objects to be booked based on provided
+    YAML activities and feelgood activities.
+
+    Args:
+        urls (dict):
+            Dictionary containing base and participation URLs.
+        yml_acts (list[dict]):
+            List of YAML activity dictionaries.
+        feelgood_activities (list[dict]):
+            List of feelgood activity dictionaries.
+
+    Returns:
+        list[Feelgood_Activity]:
+            List of Feelgood_Activity objects to be booked.
+    """
     act_to_book = []
     for f_act in feelgood_activities["activities"]:
         for yml_act in yml_acts:
@@ -245,12 +299,14 @@ def _activities_to_book(
 
 def _wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
     """
-    Wait until we reach specific time today, if time is negative,
-    do not wait.
+    Wait until reaching a specific time today. If
+    the time difference is negative,
+    the function does not wait and proceeds immediately.
 
     Args:
-        hour_goal: hour to wait for
-        minute_goal: minute in hour to wait for
+        hour_goal (int): The target hour to wait for.
+        minute_goal (int): The target minute within the hour to wait for.
+        second_goal (int): The target second within the minute to wait for.
     """
     time_goal = datetime.datetime(
         year=datetime.date.today().year,
