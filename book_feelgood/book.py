@@ -175,7 +175,7 @@ def book(
                 else:
                     hour_goal = 8
                     minute_goal = 0
-                    second_goal = 0
+                    second_goal = 1
                     wait_for_time(hour_goal, minute_goal, second_goal)
 
                     r = s.post(

@@ -23,9 +23,9 @@ activities:
 
   - name: Boka
     time: "09:00"
-    day: Saturday
+    day: Sunday
     start_time: "09:00"
   - name: Boka
     time: "09:00"
-    day: Saturday
+    day: Sunday
     start_time: "09:30"
