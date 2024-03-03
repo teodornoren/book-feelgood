@@ -1,14 +1,16 @@
-from loguru import logger
 import datetime
-import time
 import sys
+import time
+
 import requests
+from loguru import logger
+
 from book_feelgood.parse import (
-    read_yaml,
-    parse_day,
-    log_dict,
     get_date,
     load_config,
+    log_dict,
+    parse_day,
+    read_yaml,
     splash,
 )
 

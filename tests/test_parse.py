@@ -1,15 +1,16 @@
-import pytest
 import datetime
 import shlex
 
+import pytest
+
 from book_feelgood.parse import (
-    parse_day,
-    splash,
-    load_config,
-    read_yaml,
     get_date,
-    log_dict,
     initialize_parser,
+    load_config,
+    log_dict,
+    parse_day,
+    read_yaml,
+    splash,
 )
 
 

@@ -1,11 +1,13 @@
-from requests.models import Response
 from datetime import datetime, timedelta
+
+from requests.models import Response
+
 from book_feelgood.book import (
     Feelgood_Activity,
-    _parse_response,
-    _wait_for_time,
     _activities_to_book,
     _get_simple_epoch,
+    _parse_response,
+    _wait_for_time,
 )
 
 
