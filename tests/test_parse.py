@@ -1,12 +1,24 @@
 import pytest
+import datetime
+import shlex
+from loguru import logger
 
 from book_feelgood.parse import (
     parse_day,
     splash,
     load_config,
     read_yaml,
-    # initialize_parser,
+    get_date,
+    log_dict,
+    initialize_parser,
 )
+
+
+@pytest.fixture
+def caplog(caplog):
+    handler_id = logger.add(caplog.handler, format="{message}")
+    yield caplog
+    logger.remove(handler_id)
 
 
 def test_parse_day_all():
@@ -63,11 +75,53 @@ def test_load_unexisting_yml():
         read_yaml("config/dummy.yml")
 
 
-# def test_initialize_parser_help(capsys):
-#     try:
-#         initialize_parser()
-#     except SystemExit:
-#         pass
-#     output = capsys.readouterr().out
-#     print(output)
-#     assert "-usr USERNAME -pw PASSWORD" in output
+def test_log_dict(caplog):
+    test_dict = {"greeting": "hi", "affirmative": "yes", "negative": "no"}
+    log_dict(test_dict)
+    assert "negative: no" in caplog.text
+    assert "affirmative: yes" in caplog.text
+    assert "greeting: hi" in caplog.text
+
+
+def test_get_date():
+    offset = 1
+    future_date = get_date(day_offset=offset)
+    print(future_date)
+    assert future_date == (
+        datetime.datetime.now().date() + datetime.timedelta(days=offset)
+    )
+
+
+def test_shlex():
+    command = "-u Tedde -p very_secret"
+    as_list = ["-u", "Tedde", "-p", "very_secret"]
+
+    assert shlex.split(command) == as_list
+
+
+def test_initialize_parser_help(capsys):
+    try:
+        initialize_parser()
+    except SystemExit:
+        pass
+    output = capsys.readouterr().err
+    print(output)
+    assert "-usr USERNAME -pw PASSWORD" in output
+
+
+def test_initialize_parser_usr_pw():
+    command = "-usr Tedde -pw very_secret"
+    as_list = shlex.split(command)
+    args = initialize_parser(as_list)
+    print(args)
+    assert args == {
+        "username": "Tedde",
+        "password": "very_secret",
+        "activities_file": None,
+        "test": False,
+        "book_time": None,
+        "name": None,
+        "day": None,
+        "day_offset": None,
+        "start_time": None,
+    }

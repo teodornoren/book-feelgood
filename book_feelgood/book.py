@@ -86,7 +86,7 @@ def book(
     if not day_offset:
         day_offset = settings["day_offset"]
 
-    future_date = get_date(offset=int(day_offset))
+    future_date = get_date(day_offset=int(day_offset))
 
     # Check if date_next_week matches any config days
     yml_acts = []
@@ -118,32 +118,9 @@ def book(
         r = s.get(get_activities_url, params=params, headers=headers)
         feelgood_activities = r.json()
 
-        activities_to_book = []
-
-        for f_act in feelgood_activities["activities"]:
-            for yml_act in yml_acts:
-                if (
-                    yml_act["name"] in f_act["ActivityType"]["name"]
-                    and yml_act["time"] in f_act["Activity"]["start"]
-                ):
-                    booking_url = (
-                        f"{urls['base_url']}"
-                        f"{urls['participate']}"
-                        f"{f_act['Activity']['id']}"
-                    )
-
-                    fa = Feelgood_Activity(
-                        url=booking_url,
-                        name=f_act["ActivityType"]["name"],
-                        start=f_act["Activity"]["start"],
-                    )
-                    if "start_time" in yml_act:
-                        fa.start_time = yml_act["start_time"]
-                    logger.info("Found activity matching:")
-                    logger.info(f"  {fa.name}")
-                    logger.info(f"  {fa.start}")
-
-                    activities_to_book.append(fa)
+        activities_to_book = _activities_to_book(
+            urls, yml_acts, feelgood_activities
+        )
 
         if activities_to_book:
             for activity_to_book in activities_to_book:
@@ -176,7 +153,7 @@ def book(
                     hour_goal = 8
                     minute_goal = 0
                     second_goal = 1
-                    wait_for_time(hour_goal, minute_goal, second_goal)
+                    _wait_for_time(hour_goal, minute_goal, second_goal)
 
                     r = s.post(
                         activity_to_book.url,
@@ -227,7 +204,38 @@ def book(
             logger.warning("No matching activity was found.")
 
 
-def wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
+def _activities_to_book(urls: dict, yml_acts, feelgood_activities) -> list:
+    logger.debug(f"{urls=} {yml_acts=} {feelgood_activities=}")
+    act_to_book = []
+    for f_act in feelgood_activities["activities"]:
+        for yml_act in yml_acts:
+            if (
+                yml_act["name"] in f_act["ActivityType"]["name"]
+                and yml_act["time"] in f_act["Activity"]["start"]
+            ):
+                booking_url = (
+                    f"{urls['base_url']}"
+                    f"{urls['participate']}"
+                    f"{f_act['Activity']['id']}"
+                )
+
+                fa = Feelgood_Activity(
+                    url=booking_url,
+                    name=f_act["ActivityType"]["name"],
+                    start=f_act["Activity"]["start"],
+                )
+                if "start_time" in yml_act:
+                    fa.start_time = yml_act["start_time"]
+                logger.info("Found activity matching:")
+                logger.info(f"  {fa.name}")
+                logger.info(f"  {fa.start}")
+
+                act_to_book.append(fa)
+
+    return act_to_book
+
+
+def _wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
     """
     Wait until we reach specific time today, if time is negative,
     do not wait.

@@ -4,7 +4,7 @@ import argparse
 from loguru import logger
 
 
-def initialize_parser() -> dict:
+def initialize_parser(arg_list: list[str] = None) -> dict:
     """
     Needed input arguments for this program
     """
@@ -76,7 +76,7 @@ def initialize_parser() -> dict:
         required=False,
     )
 
-    parsed = parser.parse_args()
+    parsed = parser.parse_args(arg_list)
 
     return vars(parsed)
 
@@ -182,9 +182,9 @@ def log_dict(dictionary: dict, indent: int = 0):
             logger.info(f"{offset}{key}: {item}")
 
 
-def get_date(offset: int):
+def get_date(day_offset: int):
     dt = datetime.date.today()
-    new_date = dt - datetime.timedelta(days=-offset)
+    new_date = dt + datetime.timedelta(days=day_offset)
 
     logger.debug("Today:")
     logger.debug(f"  Datetime is: {dt}")
@@ -204,7 +204,3 @@ def splash():
 def load_config():
     config = read_yaml("config/config.yml")
     return (config["settings"], config["urls"], config["headers"])
-
-
-if __name__ == "__main__":
-    initialize_parser()
