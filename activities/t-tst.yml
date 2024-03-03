@@ -3,3 +3,12 @@ activities:
   - name: Cirkelträning
     time: "11:00"
     day: Thursday
+
+  - name: Boka
+    time: "09:00"
+    day: Saturday
+    start_time: "09:00"
+  - name: Boka
+    time: "09:00"
+    day: Saturday
+    start_time: "09:30"
