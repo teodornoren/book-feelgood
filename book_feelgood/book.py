@@ -114,18 +114,8 @@ def book(
         day_offset = settings["day_offset"]
 
     future_date = get_date(day_offset=int(day_offset))
-
     # Check if date_next_week matches any config days
-    yml_acts = []
-    for yml_act in activities["activities"]:
-        if future_date.isoweekday() == parse_day(yml_act["day"]):
-            logger.info("Activity day matches, will look for:")
-            log_dict(yml_act)
-            yml_acts.append(yml_act)
-
-    if not yml_acts:
-        logger.success("No activities to book today, bye!")
-        exit(0)
+    yml_acts = _check_if_activity_match(activities, future_date)
 
     with requests.session() as s:
         get_activities_url = f"{urls['base_url']}{urls['list']}"
@@ -164,12 +154,10 @@ def book(
                     payload["ActivityBooking"]["book_length"] = "30"
 
                 if test:
-                    logger.debug("Book act name")
-                    logger.debug(activity_to_book.name)
-                    logger.debug("Booking url that would be used:")
-                    logger.debug(activity_to_book.url)
+                    logger.debug(activity_to_book)
                     logger.debug("Payload that would be used:")
                     logger.debug(payload)
+                    logger.debug("TEST OVER!")
                 else:
                     hour_goal = 8
                     minute_goal = 0
@@ -186,6 +174,20 @@ def book(
                     _parse_response(r, activity_to_book)
         else:
             logger.warning("No matching activity was found.")
+
+
+def _check_if_activity_match(activities, future_date):
+    yml_acts = []
+    for yml_act in activities["activities"]:
+        if future_date.isoweekday() == parse_day(yml_act["day"]):
+            logger.info("Activity day matches, will look for:")
+            log_dict(yml_act)
+            yml_acts.append(yml_act)
+
+    if not yml_acts:
+        logger.success("No activities to book today, bye!")
+        exit(0)
+    return yml_acts
 
 
 def _parse_response(r, activity_to_book) -> None:
