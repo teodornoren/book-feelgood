@@ -179,4 +179,4 @@ def test_wait_for_time_positive():
 def test_wait_for_time_negative():
     now = datetime.now()
     now = now.replace(microsecond=0)
-    _wait_for_time(now.hour, now.minute, now.second - 1)
+    _wait_for_time(now.hour, now.minute, abs(now.second - 1))

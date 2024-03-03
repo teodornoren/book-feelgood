@@ -36,7 +36,7 @@ jobs:
           python3 -m book_feelgood.book
           --username ${{ secrets.FEELGOOD_USER }} 
           --password ${{ secrets.FEELGOOD_PW }} 
-          --test True 
+          --test
           --name "${{ inputs.activity }}" 
           --time "${{ inputs.time }}" 
           --day "${{ inputs.day }}"

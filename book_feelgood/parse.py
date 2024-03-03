@@ -34,10 +34,8 @@ def initialize_parser(arg_list: list[str] = None) -> dict:
     parser.add_argument(
         "-tst",
         "--test",
-        nargs="?",
+        action=argparse.BooleanOptionalAction,
         help="Do a dry run",
-        type=bool,
-        default=False,
         required=False,
     )
 

@@ -75,6 +75,21 @@ def test_log_dict(caplog):
     assert "greeting: hi" in caplog.text
 
 
+def test_log_dict_indent(caplog):
+    test_dict = {
+        "greeting": "hi",
+        "affirmative": "yes",
+        "negative": "no",
+        "list": [{"hello": "yo"}, {"test": "yes"}],
+        "nested_dict": {"loch": "nest"},
+    }
+    log_dict(test_dict, indent=2)
+    assert "negative: no" in caplog.text
+    assert "hello: yo" in caplog.text
+    assert "test: yes" in caplog.text
+    assert "loch: nest" in caplog.text
+
+
 def test_get_date():
     offset = 1
     future_date = get_date(day_offset=offset)
@@ -110,7 +125,7 @@ def test_initialize_parser_usr_pw():
         "username": "Tedde",
         "password": "very_secret",
         "activities_file": None,
-        "test": False,
+        "test": None,
         "book_time": None,
         "name": None,
         "day": None,
