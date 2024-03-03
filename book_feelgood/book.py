@@ -15,7 +15,9 @@ from book_feelgood.parse import (
 
 
 class Feelgood_Activity:
-    def __init__(self, url: str, name: str, start: str, start_time=0) -> None:
+    def __init__(
+        self, url: str, name: str, start: str, start_time="0"
+    ) -> None:
         self._url = url
         self._name = name
         self._start = start
@@ -40,6 +42,15 @@ class Feelgood_Activity:
     @start_time.setter
     def start_time(self, start_time):
         self._start_time = start_time
+
+    def __repr__(self) -> str:
+        return (
+            f"Feelgood_Activity: {self.url}, {self.name}, "
+            f"{self.start}, {self.start_time}"
+        )
+
+    def __eq__(self, __value: object) -> bool:
+        return bool(str(self) == str(__value))
 
 
 def book(
@@ -205,7 +216,6 @@ def book(
 
 
 def _activities_to_book(urls: dict, yml_acts, feelgood_activities) -> list:
-    logger.debug(f"{urls=} {yml_acts=} {feelgood_activities=}")
     act_to_book = []
     for f_act in feelgood_activities["activities"]:
         for yml_act in yml_acts:
@@ -224,11 +234,12 @@ def _activities_to_book(urls: dict, yml_acts, feelgood_activities) -> list:
                     name=f_act["ActivityType"]["name"],
                     start=f_act["Activity"]["start"],
                 )
-                if "start_time" in yml_act:
-                    fa.start_time = yml_act["start_time"]
                 logger.info("Found activity matching:")
                 logger.info(f"  {fa.name}")
                 logger.info(f"  {fa.start}")
+                if "start_time" in yml_act:
+                    fa.start_time = yml_act["start_time"]
+                    logger.info(f"  {fa.start_time}")
 
                 act_to_book.append(fa)
 
