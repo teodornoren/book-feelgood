@@ -205,7 +205,7 @@ def _post_bookings(
                 params=params,
                 json=payload,
             )
-            bookings.append(r, activity_to_book)
+            bookings.append((r, activity_to_book))
 
     return bookings
 
