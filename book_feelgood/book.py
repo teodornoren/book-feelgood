@@ -1,4 +1,5 @@
 import datetime
+import random
 import sys
 import time
 
@@ -168,6 +169,7 @@ def book(
         else:
             logger.warning("No matching activity was found.")
 
+        time.sleep(random.randint(4, 13))
         r = s.post(f"{urls['base_url']}{urls['logout']}")
         logger.info(f"Logged out: {username}")
         logger.debug(r.status_code)
