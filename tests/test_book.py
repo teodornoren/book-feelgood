@@ -178,7 +178,8 @@ def test_wait_for_time_positive():
     assert datetime.now().replace(microsecond=0) == future
 
 
-def test_wait_for_time_negative():
+def test_wait_for_time_negative(caplog):
     now = datetime.now()
     now = now.replace(microsecond=0)
     _wait_for_time(now.hour, now.minute, abs(now.second - 1))
+    assert "Time difference negative. Booking immediately!" in caplog.text

@@ -142,40 +142,51 @@ def book(
         )
 
         if activities_to_book:
-            for activity_to_book in activities_to_book:
-                params = {"force": 1}
-                payload = {
-                    "ActivityBooking": {"participants": 1, "resources": {}},
-                    "send_confirmation": 1,
-                }
-                if "Boka" in activity_to_book.name:
-                    epoch = _get_simple_epoch(
-                        future_date, activity_to_book.start_time
-                    )
-                    payload["ActivityBooking"]["book_start"] = str(epoch)
-                    payload["ActivityBooking"]["book_length"] = "30"
-
-                if test:
-                    logger.debug(activity_to_book)
-                    logger.debug("Payload that would be used:")
-                    logger.debug(payload)
-                    logger.debug("TEST OVER!")
-                else:
-                    hour_goal = 8
-                    minute_goal = 0
-                    second_goal = 1
-                    _wait_for_time(hour_goal, minute_goal, second_goal)
-
-                    r = s.post(
-                        activity_to_book.url,
-                        headers=headers,
-                        params=params,
-                        json=payload,
-                    )
-                    logger.info(f"Username used: {username}")
-                    _parse_response(r, activity_to_book)
+            _book_activities(
+                username, test, headers, future_date, s, activities_to_book
+            )
         else:
             logger.warning("No matching activity was found.")
+
+
+def _book_activities(
+    username: str,
+    test: bool,
+    headers: dict,
+    future_date: datetime.date,
+    s: requests.session,
+    activities_to_book: list[Feelgood_Activity],
+) -> None:
+    for activity_to_book in activities_to_book:
+        params = {"force": 1}
+        payload = {
+            "ActivityBooking": {"participants": 1, "resources": {}},
+            "send_confirmation": 1,
+        }
+        if "Boka" in activity_to_book.name:
+            epoch = _get_simple_epoch(future_date, activity_to_book.start_time)
+            payload["ActivityBooking"]["book_start"] = str(epoch)
+            payload["ActivityBooking"]["book_length"] = "30"
+
+        if test:
+            logger.debug(activity_to_book)
+            logger.debug("Payload that would be used:")
+            logger.debug(payload)
+            logger.debug("TEST OVER!")
+        else:
+            hour_goal = 8
+            minute_goal = 0
+            second_goal = 1
+            _wait_for_time(hour_goal, minute_goal, second_goal)
+
+            r = s.post(
+                activity_to_book.url,
+                headers=headers,
+                params=params,
+                json=payload,
+            )
+            logger.info(f"Username used: {username}")
+            _parse_response(r, activity_to_book)
 
 
 def _check_if_activity_match(activities, future_date):
