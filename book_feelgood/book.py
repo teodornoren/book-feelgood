@@ -168,6 +168,9 @@ def book(
         else:
             logger.warning("No matching activity was found.")
 
+        r = s.post(f"{urls['base_url']}{urls['logout']}")
+        logger.debug(r.text)
+
 
 def _post_bookings(
     test: bool,

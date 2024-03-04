@@ -5,6 +5,7 @@ settings:
 urls:
   base_url: https://feelgood.wondr.se/
   home: users/start
+  logout: users/logout
   schema: schema
   participate: w_booking/activities/participate/
   list: w_booking/activities/list
