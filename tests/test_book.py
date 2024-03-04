@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 
+import pytest
 from requests.models import Response
 
-from book_feelgood.book import (  # _check_if_activity_match,
+from book_feelgood.book import (
     Feelgood_Activity,
     _activities_to_book,
     _get_simple_epoch,
     _parse_response,
+    _return_matching_activities,
     _wait_for_time,
 )
 
@@ -18,8 +20,105 @@ def test_feelgood_activity_init(fa_fixture):
     assert fa_fixture.start_time == 123123123123123123
 
 
-def test_check_if_activity_match_true():
-    pass
+@pytest.fixture
+def future_date_fixture_1():
+    return datetime(year=2024, month=3, day=10).date()
+
+
+@pytest.fixture
+def future_date_fixture_2():
+    return datetime(year=2024, month=3, day=12).date()
+
+
+@pytest.fixture
+def activities_fixture():
+    return {
+        "activities": [
+            {
+                "name": "Boka",
+                "time": "13:30",
+                "day": "Monday",
+                "start_time": "14:30",
+            },
+            {
+                "name": "Boka",
+                "time": "13:30",
+                "day": "Monday",
+                "start_time": "15:00",
+            },
+            {
+                "name": "Boka",
+                "time": "13:30",
+                "day": "Monday",
+                "start_time": "15:30",
+            },
+            {"name": "Badminton", "time": "15:00", "day": "Wednesday"},
+            {"name": "Spinning", "time": "15:00", "day": "Friday"},
+            {
+                "name": "Boka",
+                "time": "09:00",
+                "day": "Sunday",
+                "start_time": "09:00",
+            },
+            {
+                "name": "Boka",
+                "time": "09:00",
+                "day": "Sunday",
+                "start_time": "09:30",
+            },
+        ]
+    }
+
+
+@pytest.fixture
+def matching_activity_fixture_1():
+    return [
+        {
+            "day": "Sunday",
+            "name": "Boka",
+            "start_time": "09:00",
+            "time": "09:00",
+        },
+        {
+            "day": "Sunday",
+            "name": "Boka",
+            "start_time": "09:30",
+            "time": "09:00",
+        },
+    ]
+
+
+@pytest.fixture
+def matching_activity_fixture_2():
+    return []
+
+
+@pytest.mark.parametrize(
+    "activities, future_date, expected",
+    [
+        (
+            "activities_fixture",
+            "future_date_fixture_1",
+            "matching_activity_fixture_1",
+        ),
+        (
+            "activities_fixture",
+            "future_date_fixture_2",
+            "matching_activity_fixture_2",
+        ),
+    ],
+)
+def test_return_matching_activities(
+    activities,
+    future_date,
+    expected,
+    request,
+):
+    yml_acts = _return_matching_activities(
+        request.getfixturevalue(activities),
+        request.getfixturevalue(future_date),
+    )
+    assert yml_acts == request.getfixturevalue(expected)
 
 
 def test_parse_response_success(caplog, fa_fixture):
@@ -33,32 +132,32 @@ def test_parse_response_success(caplog, fa_fixture):
     )
 
 
-def test_parse_response_activity_full(caplog, fa_fixture):
+@pytest.mark.parametrize(
+    "error_code, log_response",
+    [
+        (
+            "ACTIVITY_FULL",
+            "Activity is fully booked already:",
+        ),
+        (
+            "ACTIVITY_BOOKING_TO_EARLY",
+            "You are trying to book too soon:",
+        ),
+        ("USER_ALREADY_BOOKED", "You are already booked:"),
+    ],
+)
+def test_parse_response_activity_errors(
+    caplog,
+    fa_fixture,
+    error_code,
+    log_response,
+):
     r = Response()
-    r._content = b'{"error_code": "ACTIVITY_FULL"}'
+    content = f'"error_code": "{error_code}"'
+    r._content = bytes(f"{{{content}}}", "utf-8")
     _parse_response(r, fa_fixture)
     assert (
-        "Activity is fully booked already: Feelgood_Activity: "
-        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
-    )
-
-
-def test_parse_response_too_early(caplog, fa_fixture):
-    r = Response()
-    r._content = b'{"error_code": "ACTIVITY_BOOKING_TO_EARLY"}'
-    _parse_response(r, fa_fixture)
-    assert (
-        "You are trying to book too soon: Feelgood_Activity: "
-        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
-    )
-
-
-def test_parse_response_already_booked(caplog, fa_fixture):
-    r = Response()
-    r._content = b'{"error_code": "USER_ALREADY_BOOKED"}'
-    _parse_response(r, fa_fixture)
-    assert (
-        "You are already booked: Feelgood_Activity: "
+        f"{log_response} Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
 

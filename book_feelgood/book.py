@@ -17,7 +17,11 @@ from book_feelgood.parse import (
 
 class Feelgood_Activity:
     def __init__(
-        self, url: str, name: str, start: str, start_time="0"
+        self,
+        url: str,
+        name: str,
+        start: str,
+        start_time="0",
     ) -> None:
         self._url = url
         self._name = name
@@ -117,7 +121,11 @@ def book(
 
     future_date = get_date(day_offset=int(day_offset))
     # Check if date_next_week matches any config days
-    yml_acts = _check_if_activity_match(activities, future_date)
+    yml_acts = _return_matching_activities(activities, future_date)
+
+    if not yml_acts:
+        logger.success("No activities to book today, bye!")
+        exit(0)
 
     with requests.session() as s:
         get_activities_url = f"{urls['base_url']}{urls['list']}"
@@ -189,7 +197,10 @@ def _book_activities(
             _parse_response(r, activity_to_book)
 
 
-def _check_if_activity_match(activities, future_date):
+def _return_matching_activities(
+    activities,
+    future_date,
+):
     logger.debug(f"{activities=} {future_date=}")
     yml_acts = []
     for yml_act in activities["activities"]:
@@ -198,9 +209,6 @@ def _check_if_activity_match(activities, future_date):
             log_dict(yml_act)
             yml_acts.append(yml_act)
 
-    if not yml_acts:
-        logger.success("No activities to book today, bye!")
-        exit(0)
     return yml_acts
 
 
