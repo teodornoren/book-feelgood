@@ -144,7 +144,8 @@ def book(
 
         payload = {"User": {"email": username, "password": password}}
 
-        s.post(f"{urls['base_url']}", json=payload)
+        r = s.post(f"{urls['base_url']}", json=payload)
+        logger.debug(r.status_code)
         r = s.get(get_activities_url, params=params, headers=headers)
         feelgood_activities = r.json()
 
@@ -169,7 +170,6 @@ def book(
 
         r = s.post(f"{urls['base_url']}{urls['logout']}")
         logger.info(f"Logged out: {username}")
-        logger.debug(r.json())
         logger.debug(r.status_code)
 
 
