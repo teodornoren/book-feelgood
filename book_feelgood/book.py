@@ -166,7 +166,7 @@ def book(
             )
             for booking in bookings:
                 _parse_booking(booking)
-            logger.info(f"Username used: {username}")
+            logger.info(f"Username: {username}")
         else:
             logger.warning("No matching activity was found.")
 
@@ -218,7 +218,8 @@ def _return_matching_activities(
     for yml_act in activities["activities"]:
         if future_date.isoweekday() == parse_day(yml_act["day"]):
             logger.info(
-                f"Activity local match: {yml_act['name']=} {yml_act['day']=}"
+                f"Activity local match: name: "
+                f"{yml_act['name']} day: {yml_act['day']}"
             )
             yml_acts.append(yml_act)
 
@@ -333,7 +334,7 @@ def _match_yml_activity_to_remote(
                 if "start_time" in yml_act:
                     fa.start_time = yml_act["start_time"]
 
-                logger.info(f"Remote match: {fa.summary()}")
+                logger.info(f"Activity remote match: {fa.summary()}")
                 act_to_book.append(fa)
 
     return act_to_book
