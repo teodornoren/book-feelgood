@@ -129,7 +129,7 @@ def test_parse_response_success(caplog, fa_fixture):
     _parse_booking(booking)
     assert (
         "Successfully booked: Feelgood_Activity: "
-        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
+        "Badminton, 16:00, 123123123123123123" in caplog.text
     )
 
 

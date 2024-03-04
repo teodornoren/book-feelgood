@@ -252,7 +252,7 @@ def _parse_booking(
     r, activity_to_book = booking
     json = r.json()
     if r.status_code == 200 and json["result"] == "ok":
-        logger.success(f"Successfully booked: {activity_to_book}")
+        logger.success(f"Successfully booked: {activity_to_book.summary()}")
 
     elif "error_code" in json:
         log_error = ""
