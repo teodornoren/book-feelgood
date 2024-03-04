@@ -125,7 +125,8 @@ def test_parse_response_success(caplog, fa_fixture):
     r = Response()
     r.status_code = 200
     r._content = b'{"result": "ok"}'
-    _parse_booking(r, fa_fixture)
+    booking = r, fa_fixture
+    _parse_booking(booking)
     assert (
         "Successfully booked: Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
@@ -155,7 +156,8 @@ def test_parse_response_activity_errors(
     r = Response()
     content = f'"error_code": "{error_code}"'
     r._content = bytes(f"{{{content}}}", "utf-8")
-    _parse_booking(r, fa_fixture)
+    booking = r, fa_fixture
+    _parse_booking(booking)
     assert (
         f"{log_response} Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
@@ -165,7 +167,8 @@ def test_parse_response_activity_errors(
 def test_parse_response_unhandled_error(caplog, fa_fixture):
     r = Response()
     r._content = b'{"error_code": "OH_SHIT"}'
-    _parse_booking(r, fa_fixture)
+    booking = r, fa_fixture
+    _parse_booking(booking)
     assert "Unhandled response from feelgood:" in caplog.text
     assert "OH_SHIT" in caplog.text
 
@@ -175,7 +178,8 @@ def test_parse_response_message_this_time_etc(caplog, fa_fixture):
     r._content = bytes(
         '{"message": "Denna tid är inte tillgänglig längre."}', "utf-8"
     )
-    _parse_booking(r, fa_fixture)
+    booking = r, fa_fixture
+    _parse_booking(booking)
     assert (
         "Activity is fully booked already: Feelgood_Activity: " in caplog.text
     )
@@ -186,7 +190,8 @@ def test_parse_response_unknown(caplog, fa_fixture):
     r = Response()
     r.status_code = 666
     r._content = b'{"manamana": "duuuduuu dudu"}'
-    _parse_booking(r, fa_fixture)
+    booking = r, fa_fixture
+    _parse_booking(booking)
     assert (
         "Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
