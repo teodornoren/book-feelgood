@@ -48,6 +48,11 @@ class Feelgood_Activity:
     def start_time(self, start_time):
         self._start_time = start_time
 
+    def summary(self) -> str:
+        return (
+            f"Feelgood_Activity: {self.name}, {self.start}, {self.start_time}"
+        )
+
     def __repr__(self) -> str:
         return (
             f"Feelgood_Activity: {self.name}, "
@@ -186,10 +191,8 @@ def _post_bookings(
             payload["ActivityBooking"]["book_length"] = "30"
 
         if test:
-            logger.debug(activity_to_book)
-            logger.debug("Payload that would be used:")
-            logger.debug(payload)
-            logger.debug("TEST OVER!")
+            logger.debug(activity_to_book.summary())
+            logger.debug(f"Payload: {payload}")
         else:
             hour_goal = 8
             minute_goal = 0
@@ -215,7 +218,7 @@ def _return_matching_activities(
     yml_acts = []
     for yml_act in activities["activities"]:
         if future_date.isoweekday() == parse_day(yml_act["day"]):
-            logger.info("Activity day matches, will look for:")
+            logger.info("Activity match! Looking for:")
             log_dict(yml_act)
             yml_acts.append(yml_act)
 
@@ -272,7 +275,6 @@ def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
         int: The Unix epoch timestamp
             corresponding to the provided date and time.
     """
-    logger.info(f"  Start time: {time}")
     hour_min_split = time.split(":")
     epoch = datetime.datetime.combine(
         date=date,
