@@ -157,7 +157,7 @@ def book(
         )
 
         if activities_to_book:
-            responses = _post_bookings(
+            bookings = _post_bookings(
                 test,
                 headers,
                 future_date,
@@ -165,8 +165,8 @@ def book(
                 activities_to_book,
             )
             logger.info(f"Username used: {username}")
-            for response in responses:
-                _parse_response(response)
+            for booking in bookings:
+                _parse_booking(booking)
         else:
             logger.warning("No matching activity was found.")
 
@@ -177,8 +177,8 @@ def _post_bookings(
     future_date: datetime.date,
     s: requests.session,
     activities_to_book: list[Feelgood_Activity],
-) -> list[requests.Response]:
-    responses = []
+) -> list[tuple[requests.Response, Feelgood_Activity]]:
+    bookings = []
     for activity_to_book in activities_to_book:
         params = {"force": 1}
         payload = {
@@ -205,9 +205,9 @@ def _post_bookings(
                 params=params,
                 json=payload,
             )
-            responses.append(r)
+            bookings.append(r, activity_to_book)
 
-    return responses
+    return bookings
 
 
 def _return_matching_activities(
@@ -225,9 +225,8 @@ def _return_matching_activities(
     return yml_acts
 
 
-def _parse_response(
-    r,
-    activity_to_book,
+def _parse_booking(
+    booking: tuple[requests.Response, Feelgood_Activity]
 ) -> None:
     """
     Parse the response from the booking API and log relevant information.
@@ -239,6 +238,7 @@ def _parse_response(
     Returns:
         None
     """
+    r, activity_to_book = booking
     json = r.json()
     if r.status_code == 200 and json["result"] == "ok":
         logger.success(f"Successfully booked: {activity_to_book}")

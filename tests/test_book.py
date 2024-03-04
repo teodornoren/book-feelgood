@@ -7,7 +7,7 @@ from book_feelgood.book import (
     Feelgood_Activity,
     _get_simple_epoch,
     _match_yml_activity_to_remote,
-    _parse_response,
+    _parse_booking,
     _return_matching_activities,
     _wait_for_time,
 )
@@ -125,7 +125,7 @@ def test_parse_response_success(caplog, fa_fixture):
     r = Response()
     r.status_code = 200
     r._content = b'{"result": "ok"}'
-    _parse_response(r, fa_fixture)
+    _parse_booking(r, fa_fixture)
     assert (
         "Successfully booked: Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
@@ -155,7 +155,7 @@ def test_parse_response_activity_errors(
     r = Response()
     content = f'"error_code": "{error_code}"'
     r._content = bytes(f"{{{content}}}", "utf-8")
-    _parse_response(r, fa_fixture)
+    _parse_booking(r, fa_fixture)
     assert (
         f"{log_response} Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
@@ -165,7 +165,7 @@ def test_parse_response_activity_errors(
 def test_parse_response_unhandled_error(caplog, fa_fixture):
     r = Response()
     r._content = b'{"error_code": "OH_SHIT"}'
-    _parse_response(r, fa_fixture)
+    _parse_booking(r, fa_fixture)
     assert "Unhandled response from feelgood:" in caplog.text
     assert "OH_SHIT" in caplog.text
 
@@ -175,7 +175,7 @@ def test_parse_response_message_this_time_etc(caplog, fa_fixture):
     r._content = bytes(
         '{"message": "Denna tid är inte tillgänglig längre."}', "utf-8"
     )
-    _parse_response(r, fa_fixture)
+    _parse_booking(r, fa_fixture)
     assert (
         "Activity is fully booked already: Feelgood_Activity: " in caplog.text
     )
@@ -186,7 +186,7 @@ def test_parse_response_unknown(caplog, fa_fixture):
     r = Response()
     r.status_code = 666
     r._content = b'{"manamana": "duuuduuu dudu"}'
-    _parse_response(r, fa_fixture)
+    _parse_booking(r, fa_fixture)
     assert (
         "Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
