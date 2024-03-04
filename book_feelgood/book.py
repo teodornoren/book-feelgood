@@ -164,9 +164,9 @@ def book(
                 s,
                 activities_to_book,
             )
-            logger.info(f"Username used: {username}")
             for booking in bookings:
                 _parse_booking(booking)
+            logger.info(f"Username used: {username}")
         else:
             logger.warning("No matching activity was found.")
 
@@ -364,8 +364,8 @@ def _wait_for_time(
         microsecond=0,
     )
     diff = time_goal - datetime.datetime.now()
-    logger.info(f"Sleeping for: {diff}")
     if diff.total_seconds() > 0.0:
+        logger.info(f"Sleeping for: {diff}")
         time.sleep(diff.total_seconds())
         logger.success("Done sleeping")
     else:
