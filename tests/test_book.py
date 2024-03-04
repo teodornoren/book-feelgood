@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from requests.models import Response
 
-from book_feelgood.book import (
+from book_feelgood.book import (  # _check_if_activity_match,
     Feelgood_Activity,
     _activities_to_book,
     _get_simple_epoch,
@@ -18,6 +18,10 @@ def test_feelgood_activity_init(fa_fixture):
     assert fa_fixture.start_time == 123123123123123123
 
 
+def test_check_if_activity_match_true():
+    pass
+
+
 def test_parse_response_success(caplog, fa_fixture):
     r = Response()
     r.status_code = 200
@@ -25,7 +29,7 @@ def test_parse_response_success(caplog, fa_fixture):
     _parse_response(r, fa_fixture)
     assert (
         "Successfully booked: Feelgood_Activity: "
-        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
 
 
@@ -35,7 +39,7 @@ def test_parse_response_activity_full(caplog, fa_fixture):
     _parse_response(r, fa_fixture)
     assert (
         "Activity is fully booked already: Feelgood_Activity: "
-        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
 
 
@@ -45,7 +49,7 @@ def test_parse_response_too_early(caplog, fa_fixture):
     _parse_response(r, fa_fixture)
     assert (
         "You are trying to book too soon: Feelgood_Activity: "
-        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
 
 
@@ -55,7 +59,7 @@ def test_parse_response_already_booked(caplog, fa_fixture):
     _parse_response(r, fa_fixture)
     assert (
         "You are already booked: Feelgood_Activity: "
-        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
 
 
@@ -76,7 +80,7 @@ def test_parse_response_message_this_time_etc(caplog, fa_fixture):
     assert (
         "Activity is fully booked already: Feelgood_Activity: " in caplog.text
     )
-    assert "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+    assert "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
 
 
 def test_parse_response_unknown(caplog, fa_fixture):
@@ -86,7 +90,7 @@ def test_parse_response_unknown(caplog, fa_fixture):
     _parse_response(r, fa_fixture)
     assert (
         "Feelgood_Activity: "
-        "haha.se, Badminton, 16:00, 123123123123123123" in caplog.text
+        "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
     assert "r.status_code=666" in caplog.text
     assert "{'manmana': 'duuuduuu dudu'}" in caplog.text

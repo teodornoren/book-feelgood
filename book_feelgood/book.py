@@ -46,8 +46,8 @@ class Feelgood_Activity:
 
     def __repr__(self) -> str:
         return (
-            f"Feelgood_Activity: {self.url}, {self.name}, "
-            f"{self.start}, {self.start_time}"
+            f"Feelgood_Activity: {self.name}, "
+            f"{self.start}, {self.start_time}, {self.url}"
         )
 
     def __eq__(self, __value: object) -> bool:
@@ -190,6 +190,7 @@ def _book_activities(
 
 
 def _check_if_activity_match(activities, future_date):
+    logger.debug(f"{activities=} {future_date=}")
     yml_acts = []
     for yml_act in activities["activities"]:
         if future_date.isoweekday() == parse_day(yml_act["day"]):
