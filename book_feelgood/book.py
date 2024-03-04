@@ -146,7 +146,11 @@ def book(
         payload = {"User": {"email": username, "password": password}}
 
         r = s.post(f"{urls['base_url']}", json=payload)
-        logger.debug(r.status_code)
+        if r.status_code == 200:
+            logger.success(f"Logged in: {username}")
+        else:
+            logger.error("Something went wrong with logging in, exiting...")
+            exit(8123)
         r = s.get(get_activities_url, params=params, headers=headers)
         feelgood_activities = r.json()
 
@@ -171,8 +175,10 @@ def book(
 
         time.sleep(random.randint(4, 13))
         r = s.post(f"{urls['base_url']}{urls['logout']}")
-        logger.info(f"Logged out: {username}")
-        logger.debug(r.status_code)
+        if r.status_code == 200:
+            logger.success(f"Logged out: {username}")
+        else:
+            logger.error("Logout fail, exiting...")
 
 
 def _post_bookings(
