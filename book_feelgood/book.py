@@ -214,18 +214,21 @@ def _return_matching_activities(
     activities,
     future_date,
 ):
-    logger.debug(f"{activities=} {future_date=}")
     yml_acts = []
     for yml_act in activities["activities"]:
         if future_date.isoweekday() == parse_day(yml_act["day"]):
-            logger.info("Activity match! Looking for:")
-            log_dict(yml_act)
+            logger.info(
+                f"Activity local match: {yml_act['name']=} {yml_act['day']=}"
+            )
             yml_acts.append(yml_act)
 
     return yml_acts
 
 
-def _parse_response(r, activity_to_book) -> None:
+def _parse_response(
+    r,
+    activity_to_book,
+) -> None:
     """
     Parse the response from the booking API and log relevant information.
 
@@ -263,7 +266,10 @@ def _parse_response(r, activity_to_book) -> None:
         logger.error(f"{json=}")
 
 
-def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
+def _get_simple_epoch(
+    date: datetime.datetime,
+    time: str,
+) -> int:
     """
     Convert a given date and time string to a Unix epoch timestamp.
 
@@ -285,7 +291,9 @@ def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
 
 
 def _match_yml_activity_to_remote(
-    urls: dict, yml_acts: list[dict], feelgood_activities: list[dict]
+    urls: dict,
+    yml_acts: list[dict],
+    feelgood_activities: list[dict],
 ) -> list[Feelgood_Activity]:
     """
     Generate a list of Feelgood_Activity objects to be booked based on provided
@@ -321,13 +329,11 @@ def _match_yml_activity_to_remote(
                     name=f_act["ActivityType"]["name"],
                     start=f_act["Activity"]["start"],
                 )
-                logger.info("Found activity matching:")
-                logger.info(f"  {fa.name}")
-                logger.info(f"  {fa.start}")
+
                 if "start_time" in yml_act:
                     fa.start_time = yml_act["start_time"]
-                    logger.info(f"  {fa.start_time}")
 
+                logger.info(f"Remote match: {fa.summary()}")
                 act_to_book.append(fa)
 
     return act_to_book

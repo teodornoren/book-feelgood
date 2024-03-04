@@ -205,13 +205,6 @@ def get_date(day_offset: int) -> datetime.date:
     dt = datetime.date.today()
     new_date = dt + datetime.timedelta(days=day_offset)
 
-    logger.debug("Today:")
-    logger.debug(f"  Datetime is: {dt}")
-    logger.debug(f"  Weekday is: {parse_day(dt.isoweekday())}")
-    logger.debug("Offset day:")
-    logger.debug(f"  Datetime is: {new_date}")
-    logger.debug(f"  Weekday is: {parse_day(new_date.isoweekday())}")
-
     return new_date
 
 
