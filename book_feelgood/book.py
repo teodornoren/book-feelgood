@@ -103,9 +103,7 @@ def book(
     activities = None
     if activities_file:
         activities = read_yaml(f"activities/{activities_file}.yml")
-        logger.info(
-            f"Running using activities from activities/{activities_file}.yml"
-        )
+        logger.info(f"Using activities/{activities_file}.yml")
     else:
         if name and book_time and day:
             test_act = {"name": name, "time": book_time, "day": day}
@@ -217,9 +215,9 @@ def _return_matching_activities(
     yml_acts = []
     for yml_act in activities["activities"]:
         if future_date.isoweekday() == parse_day(yml_act["day"]):
-            logger.info(
+            logger.debug(
                 f"Activity local match: name: "
-                f"{yml_act['name']} day: {yml_act['day']}"
+                f"{yml_act['name']}, day: {yml_act['day']}"
             )
             yml_acts.append(yml_act)
 
@@ -334,7 +332,7 @@ def _match_yml_activity_to_remote(
                 if "start_time" in yml_act:
                     fa.start_time = yml_act["start_time"]
 
-                logger.info(f"Activity remote match: {fa.summary()}")
+                logger.debug(f"Activity remote match: {fa.summary()}")
                 act_to_book.append(fa)
 
     return act_to_book
