@@ -185,14 +185,14 @@ def test_parse_response_message_this_time_etc(caplog, fa_fixture):
 def test_parse_response_unknown(caplog, fa_fixture):
     r = Response()
     r.status_code = 666
-    r._content = b'{"manmana": "duuuduuu dudu"}'
+    r._content = b'{"manamana": "duuuduuu dudu"}'
     _parse_response(r, fa_fixture)
     assert (
         "Feelgood_Activity: "
         "Badminton, 16:00, 123123123123123123, haha.se" in caplog.text
     )
     assert "r.status_code=666" in caplog.text
-    assert "{'manmana': 'duuuduuu dudu'}" in caplog.text
+    assert "{'manamana': 'duuuduuu dudu'}" in caplog.text
 
 
 def test_activities_to_book():
@@ -284,5 +284,6 @@ def test_wait_for_time_positive():
 def test_wait_for_time_negative(caplog):
     now = datetime.now()
     now = now.replace(microsecond=0)
-    _wait_for_time(now.hour, now.minute, abs(now.second - 1))
+    past = now + timedelta(seconds=-1)
+    _wait_for_time(past.hour, past.minute, past.second)
     assert "Time difference negative. Booking immediately!" in caplog.text
