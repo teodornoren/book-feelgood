@@ -164,11 +164,11 @@ def book(
             )
             for booking in bookings:
                 _parse_booking(booking)
-            logger.info(f"Username: {username}")
         else:
             logger.warning("No matching activity was found.")
 
         r = s.post(f"{urls['base_url']}{urls['logout']}")
+        logger.info(f"Logged out: {username}")
         logger.debug(r.json())
         logger.debug(r.status_code)
 
