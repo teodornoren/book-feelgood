@@ -5,8 +5,8 @@ from requests.models import Response
 
 from book_feelgood.book import (
     Feelgood_Activity,
-    _activities_to_book,
     _get_simple_epoch,
+    _match_yml_activity_to_remote,
     _parse_response,
     _return_matching_activities,
     _wait_for_time,
@@ -251,7 +251,7 @@ def test_activities_to_book():
             }
         ],
     }
-    result = _activities_to_book(urls, yml_acts, feelgood_activities)
+    result = _match_yml_activity_to_remote(urls, yml_acts, feelgood_activities)
     expected_url = (
         "https://dummy.com/w_booking/activities/" "participate/cool_id"
     )

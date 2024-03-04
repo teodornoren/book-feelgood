@@ -145,26 +145,35 @@ def book(
         r = s.get(get_activities_url, params=params, headers=headers)
         feelgood_activities = r.json()
 
-        activities_to_book = _activities_to_book(
-            urls, yml_acts, feelgood_activities
+        activities_to_book = _match_yml_activity_to_remote(
+            urls,
+            yml_acts,
+            feelgood_activities,
         )
 
         if activities_to_book:
-            _book_activities(
-                username, test, headers, future_date, s, activities_to_book
+            responses = _post_bookings(
+                test,
+                headers,
+                future_date,
+                s,
+                activities_to_book,
             )
+            logger.info(f"Username used: {username}")
+            for response in responses:
+                _parse_response(response)
         else:
             logger.warning("No matching activity was found.")
 
 
-def _book_activities(
-    username: str,
+def _post_bookings(
     test: bool,
     headers: dict,
     future_date: datetime.date,
     s: requests.session,
     activities_to_book: list[Feelgood_Activity],
-) -> None:
+) -> list[requests.Response]:
+    responses = []
     for activity_to_book in activities_to_book:
         params = {"force": 1}
         payload = {
@@ -193,8 +202,9 @@ def _book_activities(
                 params=params,
                 json=payload,
             )
-            logger.info(f"Username used: {username}")
-            _parse_response(r, activity_to_book)
+            responses.append(r)
+
+    return responses
 
 
 def _return_matching_activities(
@@ -272,7 +282,7 @@ def _get_simple_epoch(date: datetime.datetime, time: str) -> int:
     return epoch
 
 
-def _activities_to_book(
+def _match_yml_activity_to_remote(
     urls: dict, yml_acts: list[dict], feelgood_activities: list[dict]
 ) -> list[Feelgood_Activity]:
     """
@@ -321,7 +331,11 @@ def _activities_to_book(
     return act_to_book
 
 
-def _wait_for_time(hour_goal: int, minute_goal: int, second_goal: int) -> None:
+def _wait_for_time(
+    hour_goal: int,
+    minute_goal: int,
+    second_goal: int,
+) -> None:
     """
     Wait until reaching a specific time today. If
     the time difference is negative,
