@@ -189,13 +189,15 @@ def _post_bookings(
     activities_to_book: list[Feelgood_Activity],
 ) -> list[tuple[requests.Response, Feelgood_Activity]]:
     bookings = []
+    params = {"force": 1}
     for activity_to_book in activities_to_book:
-        params = {"force": 1}
+        # Create generate payload function in feelgood class
         payload = {
             "ActivityBooking": {"participants": 1, "resources": {}},
             "send_confirmation": 1,
         }
         if "Boka" in activity_to_book.name:
+            #  Move this to the Feelgood class
             epoch = _get_simple_epoch(future_date, activity_to_book.start_time)
             payload["ActivityBooking"]["book_start"] = str(epoch)
             payload["ActivityBooking"]["book_length"] = "30"
