@@ -17,9 +17,13 @@ activities:
     time: "15:00"
     day: Wednesday
 
-  - name: Spinning
-    time: "15:00"
+  - name: Badminton
+    time: "14:00"
     day: Friday
+
+  # - name: Spinning
+  #   time: "15:00"
+  #   day: Friday
 
   # - name: Boka
   #   time: "09:00"
