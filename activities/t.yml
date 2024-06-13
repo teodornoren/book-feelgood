@@ -14,9 +14,6 @@ activities:
     start_time: "15:30"
 
   - name: Badminton
-    time: "14:00"
-    day: Wednesday
-  - name: Badminton
     time: "15:00"
     day: Wednesday
 
