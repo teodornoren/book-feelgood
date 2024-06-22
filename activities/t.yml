@@ -38,6 +38,22 @@ activities:
     time: "13:25"
     day: Friday
 
+
+  - name: Boka
+    time: "13:00"
+    day: Friday
+    start_time: "13:00"
+
+  - name: Boka
+    time: "13:00"
+    day: Friday
+    start_time: "13:30"
+
+  - name: Boka
+    time: "13:00"
+    day: Friday
+    start_time: "14:00"
+
   # - name: Spinning
   #   time: "15:00"
   #   day: Friday
