@@ -1,15 +1,15 @@
 ---
 activities:
   - name: Boka
-    time: "13:30"
+    time: "13:00"
     day: Monday
     start_time: "14:30"
   - name: Boka
-    time: "13:30"
+    time: "13:00"
     day: Monday
     start_time: "15:00"
   - name: Boka
-    time: "13:30"
+    time: "13:00"
     day: Monday
     start_time: "15:30"
 
