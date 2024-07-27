@@ -3,3 +3,8 @@ activities:
   - name: Badminton
     time: "15:00"
     day: Wednesday
+
+  - name: Badminton
+    time: "13:25"
+    day: Friday
+...

@@ -1,69 +1,15 @@
 ---
 activities:
   - name: Boka
-    time: "13:00"
+    time: "13:30"
     day: Monday
     start_time: "14:30"
   - name: Boka
-    time: "13:00"
+    time: "13:30"
     day: Monday
     start_time: "15:00"
   - name: Boka
-    time: "13:00"
+    time: "13:30"
     day: Monday
     start_time: "15:30"
-
-  # - name: Badminton
-  #   time: "15:00"
-  #
-  #
-  #   day: Wednesday
-
-  - name: Boka
-    time: "13:00"
-    day: Wednesday
-    start_time: "14:00"
-
-  - name: Boka
-    time: "13:00"
-    day: Wednesday
-    start_time: "14:30"
-
-  - name: Boka
-    time: "13:00"
-    day: Wednesday
-    start_time: "15:30"
-
-  - name: Badminton
-    time: "13:25"
-    day: Friday
-
-
-  - name: Boka
-    time: "13:00"
-    day: Friday
-    start_time: "13:00"
-
-  - name: Boka
-    time: "13:00"
-    day: Friday
-    start_time: "13:30"
-
-  - name: Boka
-    time: "13:00"
-    day: Friday
-    start_time: "14:00"
-
-  # - name: Spinning
-  #   time: "15:00"
-  #   day: Friday
-
-  # - name: Boka
-  #   time: "09:00"
-  #   day: Sunday
-  #   start_time: "09:00"
-  # - name: Boka
-  #   time: "09:00"
-  #   day: Sunday
-  #   start_time: "09:30"
 ...
