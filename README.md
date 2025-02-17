@@ -91,3 +91,4 @@ how to book:\
     /activities/participate/<activity_code>/?force=1\
 
 
+test
