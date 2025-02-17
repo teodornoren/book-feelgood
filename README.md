@@ -89,3 +89,4 @@ how to unbook:\
     /activities/cancel/<activity_code>/1?force=1\
 how to book:\
     /activities/participate/<activity_code>/?force=1\
+
